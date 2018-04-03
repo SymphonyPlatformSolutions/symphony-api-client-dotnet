@@ -1,0 +1,21 @@
+﻿{
+  "sessionAuthHost": "sup-api.symphony.com",
+  "sessionAuthPort": 443,
+  "keyAuthHost": "sup-keyauth.symphony.com",
+  "keyAuthPort": 443,
+  "podHost": "sup.symphony.com",
+  "podPort": 443,
+  "agentHost": "sup-agent.symphony.com",
+  "agentPort": 443,
+  "botCertPath": "C:/Users/Michael/Desktop/symphonyProjects/agent-sdk/atlas/symphony/global/certs/",
+  "botCertName": "bot.user4",
+  "botCertPassword": "changeit",
+  "botEmailAddress": "butler@hubot.symphony.com",
+  "appCertPath": "",
+  "appCertName": "",
+  "appCertPassword": "",
+  "proxyURL": "",
+  "proxyUsername": "",
+  "proxyPassword": "",
+  "authTokenRefreshPeriod": "30"
+}
