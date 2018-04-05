@@ -30,7 +30,7 @@ namespace apiClientDotNetTest
     public class InitBotTest
     {
         [TestMethod]
-        public void ChatBotTest()
+        public void ChatBotInitTest()
         {
             SymBotClient symBotClient = new SymBotClient();
             DatafeedEventsService datafeedEventsService = new DatafeedEventsService();

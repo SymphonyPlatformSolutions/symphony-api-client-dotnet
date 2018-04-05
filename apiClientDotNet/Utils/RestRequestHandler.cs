@@ -4,9 +4,11 @@ using System.Text;
 using apiClientDotNet.Models;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using System.Collections.Specialized;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Net.Http;
 
 namespace apiClientDotNet.Utils
 {
@@ -26,6 +28,10 @@ namespace apiClientDotNet.Utils
 
         public HttpWebResponse executeRequest(object data, String url, bool isAuth, string method, SymConfig symConfig, bool isAgent)
         {
+            if (data is Message && method == WebRequestMethods.Http.Post)
+            {
+                postFormData(symConfig, url, data);
+            }
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
             req.Credentials = CredentialCache.DefaultCredentials;
             req.Method = method;
@@ -43,19 +49,7 @@ namespace apiClientDotNet.Utils
             {
                 req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
             }
-            if (data is Message && method == WebRequestMethods.Http.Post)
-            {
-                Message message = (Message)data;
-                req.ContentType = "multipart/form-data";
-                var postData = "message=" + message.message;
-                var formData = Encoding.ASCII.GetBytes(postData);
-                req.ContentLength = formData.Length;
-
-                using (var reqStream = req.GetRequestStream())
-                {
-                    reqStream.Write(formData, 0, formData.Length);
-                }
-            }
+            
                 
 
             //req.Proxy = Proxy;
@@ -78,6 +72,49 @@ namespace apiClientDotNet.Utils
             StreamReader reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
             String responseString = reader.ReadToEnd();
             return responseString;
+        }
+
+     
+
+        private System.IO.Stream postFormData(SymConfig symConfig, string url, object data)
+        {
+            Message message = (Message)data;
+            HttpContent stringContent = new StringContent(message.message);
+            // examples of converting both Stream and byte [] to HttpContent objects
+            // representing input type file
+           // HttpContent fileStreamContent = new StreamContent(fileStream);
+           // HttpContent bytesContent = new ByteArrayContent(fileBytes);
+
+            // Submit the form using HttpClient and 
+            // create form data as Multipart (enctype="multipart/form-data")
+
+            using (var client = new HttpClient())
+            using (var formData = new MultipartFormDataContent())
+            {
+                // Add the HttpContent objects to the form data
+
+                // <input type="text" name="filename" />
+                formData.Add(stringContent, "message", "message");
+                // <input type="file" name="file1" />
+                //formData.Add(fileStreamContent, "file1", "file1");
+                // <input type="file" name="file2" />
+                //formData.Add(bytesContent, "file2", "file2");
+
+                // Invoke the request to the server
+
+                // equivalent to pressing the submit button on
+                // a form with attributes (action="{url}" method="post")
+                client.DefaultRequestHeaders.Add("sessionToken", symConfig.authTokens.sessionToken);
+                client.DefaultRequestHeaders.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
+                var response = client.PostAsync(url, formData).Result;
+
+                // ensure the request was a success
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+                return response.Content.ReadAsStreamAsync().Result;
+            }
         }
     }
 }
