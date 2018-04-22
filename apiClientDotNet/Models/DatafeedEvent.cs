@@ -27,10 +27,4 @@ namespace apiClientDotNet.Models
         public EventPayload payload { get; set; }
 
     }
-
-    public class Initiator
-    {
-        [JsonProperty("user")]
-        public User user { get; set; }
-    }
 }

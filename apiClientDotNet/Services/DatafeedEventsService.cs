@@ -45,7 +45,10 @@ namespace apiClientDotNet.Services
             while (!stopLoop)
             {
                 events = RunAsync(symConfig, datafeed, datafeedClient).GetAwaiter().GetResult();
-                handleEvents(events);
+                if (events != null)
+                {
+                    handleEvents(events);
+                }
                 getEventsFromDatafeed(symConfig, datafeed, datafeedClient);
             }
 

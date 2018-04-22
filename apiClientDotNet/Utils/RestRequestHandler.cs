@@ -57,7 +57,14 @@ namespace apiClientDotNet.Utils
             HttpWebResponse resp = null;
             try
             {
-                return (HttpWebResponse)req.GetResponse();
+                resp = (HttpWebResponse)req.GetResponse();
+                if (resp.StatusCode != HttpStatusCode.OK)
+                {
+                    ErrorHandler errorHandler = new ErrorHandler();
+                    errorHandler.handleError(resp);
+                }
+
+                return resp;
             }
             catch (WebException we)
             {
