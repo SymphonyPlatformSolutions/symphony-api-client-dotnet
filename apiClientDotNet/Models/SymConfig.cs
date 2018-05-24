@@ -61,6 +61,15 @@ namespace apiClientDotNet.Models
         [JsonProperty("proxyPassword")]
         public string proxyPassword { get; set; }
 
+        [JsonProperty("sessionProxyURL")]
+        public string sessionProxyURL { get; set; }
+
+        [JsonProperty("sessionProxyUsername")]
+        public string sessionProxyUsername { get; set; }
+
+        [JsonProperty("sessionProxyPassword")]
+        public string sessionProxyPassword { get; set; }
+
         [JsonProperty("authTokenRefreshPeriod")]
         public string authTokenRefreshPeriod { get; set; }
 

@@ -16,6 +16,8 @@ namespace apiClientDotNet.Services
 {
     public class DatafeedEventsService
     {
+
+        static bool stopLoop = false;
         private List<RoomListener> roomListeners;
         private List<IMListener> IMListeners;
         private List<ConnectionListener> connectionListeners;
@@ -37,7 +39,10 @@ namespace apiClientDotNet.Services
             return datafeed;
         }
 
-        static bool stopLoop = false;
+        public void stopGettingEventsFromDatafeed()
+        {
+            stopLoop = true;
+        }
 
         public void getEventsFromDatafeed(SymConfig symConfig, Datafeed datafeed, DatafeedClient datafeedClient)
         {

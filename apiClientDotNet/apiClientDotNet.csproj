@@ -12,6 +12,7 @@
     <PackageLicenseUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet</RepositoryUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

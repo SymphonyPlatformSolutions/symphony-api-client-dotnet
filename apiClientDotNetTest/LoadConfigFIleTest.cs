@@ -11,12 +11,11 @@ namespace apiClientDotNetTest
     {
 
         [TestMethod]
-        public void LoadSessionAuthHost()
+        public void LoadConfigTest()
         {
             SymConfigLoader symConfigLoader = new SymConfigLoader();
             SymConfig symConfigPoco = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-
-            Assert.IsTrue(symConfigPoco.sessionAuthHost == "sup-api.symphony.com");
+            Assert.IsTrue(symConfigPoco.sessionAuthHost == "preview.symphony.com");
         }
     }
 }

@@ -7,6 +7,7 @@ using apiClientDotNet;
 using apiClientDotNet.Listeners;
 using apiClientDotNet.Services;
 using apiClientDotNet.Models.Events;
+using System.Net;
 
 namespace apiClientDotNetTest
 {
@@ -25,9 +26,9 @@ namespace apiClientDotNetTest
             stream.streamId = "YuijXsC6SIKg7rbExqJ7dX___p15TcofdA";
 
             MessageClient messageClient = new apiClientDotNet.MessageClient();
-            messageClient.sendMessage(symConfig, message, stream);
+            HttpWebResponse resp = messageClient.sendMessage(symConfig, message, stream);
 
-            Assert.IsTrue(true);
+            Assert.IsTrue(resp.StatusCode == HttpStatusCode.OK);
         }
     }
 }

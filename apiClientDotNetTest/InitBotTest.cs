@@ -30,7 +30,7 @@ namespace apiClientDotNetTest
     public class InitBotTest
     {
         [TestMethod]
-        public void ChatBotInitTest()
+        public void DatafeedCreateTest()
         {
             SymBotClient symBotClient = new SymBotClient();
             DatafeedEventsService datafeedEventsService = new DatafeedEventsService();
@@ -38,10 +38,8 @@ namespace apiClientDotNetTest
             RoomListener botLogic = new BotLogic();
             DatafeedClient datafeedClient = datafeedEventsService.init(symConfig);
             Datafeed datafeed = datafeedEventsService.createDatafeed(symConfig, datafeedClient);
-            datafeedEventsService.addRoomListener(botLogic);
-            datafeedEventsService.getEventsFromDatafeed(symConfig, datafeed, datafeedClient);
 
-            Assert.IsTrue(true);
+            Assert.IsTrue(datafeed.datafeedID != null);
         }
     }
 }

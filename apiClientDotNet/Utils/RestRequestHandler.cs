@@ -32,7 +32,24 @@ namespace apiClientDotNet.Utils
             {
                 postFormData(symConfig, url, data);
             }
+
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
+            if (symConfig.sessionProxyURL.Length > 0 && url.Contains("sessionauth"))
+            {
+                WebProxy sessionProxy = new WebProxy();
+                Uri sessionProxyUri = new Uri(symConfig.sessionProxyURL);
+                sessionProxy.Address=sessionProxyUri;
+                sessionProxy.Credentials = new NetworkCredential(symConfig.sessionProxyUsername, symConfig.sessionProxyPassword);
+                req.Proxy = sessionProxy;
+            } else if (symConfig.proxyURL.Length > 0 && (url.Contains("pod") || url.Contains("sessionauth")))
+            {
+                WebProxy proxy = new WebProxy();
+                Uri proxyUri = new Uri(symConfig.proxyURL);
+                proxy.Address = proxyUri;
+                proxy.Credentials = new NetworkCredential(symConfig.proxyUsername, symConfig.proxyPassword);
+                req.Proxy = proxy;
+
+            }
             req.Credentials = CredentialCache.DefaultCredentials;
             req.Method = method;
             if (isAuth)
@@ -57,6 +74,7 @@ namespace apiClientDotNet.Utils
             HttpWebResponse resp = null;
             try
             {
+  
                 resp = (HttpWebResponse)req.GetResponse();
                 if (resp.StatusCode != HttpStatusCode.OK)
                 {
