@@ -48,10 +48,14 @@ If all of the traffic to your instance of Symphony goes through a single proxy t
 If the traffic to your instance of Symphony is split between two proxys, one for Pod calls and a second for SessionAuth calls set the following configuration information. 
 
   Pod call proxy info:
+  
           "proxyURL": "",
           "proxyUsername": "",
           "proxyPassword": "",
+          
   SesssionAuth proxy info:
+  
           "sessionProxyURL": "",
           "sessionProxyUsername": "",
           "sessionProxyPassword": "",
+          
