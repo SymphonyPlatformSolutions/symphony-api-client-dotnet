@@ -17,7 +17,7 @@ namespace apiClientDotNetTest
         [TestMethod]
         public void MessageRoomTest()
         {
-            SymBotClient symBotClient = new SymBotClient();
+            /*SymBotClient symBotClient = new SymBotClient();
             SymConfig symConfig = symBotClient.initBot("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
             Message message = new Message();
             message.message = "<messageML>Hello world!</messageML>";
@@ -28,7 +28,7 @@ namespace apiClientDotNetTest
             MessageClient messageClient = new apiClientDotNet.MessageClient();
             HttpWebResponse resp = messageClient.sendMessage(symConfig, message, stream);
 
-            Assert.IsTrue(resp.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(resp.StatusCode == HttpStatusCode.OK);*/
         }
     }
 }

@@ -20,7 +20,10 @@
   "sessionProxyURL": "",
   "sessionProxyUsername": "",
   "sessionProxyPassword": "",
-  "authTokenRefreshPeriod": "30"
+  "authTokenRefreshPeriod": "30",
+  "botPrivateKeyPath": "C:/Users/Michael/Documents/rsacerts/",
+  "botPrivateKeyName": "rsatestbot_privatekey.pem",
+  "botUsername": "rsatestbot"
 }
 
 

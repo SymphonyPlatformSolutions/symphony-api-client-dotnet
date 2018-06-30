@@ -73,6 +73,15 @@ namespace apiClientDotNet.Models
         [JsonProperty("authTokenRefreshPeriod")]
         public string authTokenRefreshPeriod { get; set; }
 
+        [JsonProperty("botPrivateKeyPath")]
+        public string botPrivateKeyPath { get; set; }
+
+        [JsonProperty("botPrivateKeyName")]
+        public string botPrivateKeyName { get; set; }
+
+        [JsonProperty("botUsername")]
+        public string botUsername { get; set; }
+
         public AuthTokens authTokens { get; set; }
  
     }

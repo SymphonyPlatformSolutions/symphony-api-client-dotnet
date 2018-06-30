@@ -11,7 +11,7 @@ namespace apiClientDotNet.Models
         public byte[] fileContent { get; set; }
 
         [JsonProperty("fileName")]
-        public string fileNaame { get; set; }
+        public string fileName { get; set; }
 
         [JsonProperty("size")]
         public long size { get; set; }

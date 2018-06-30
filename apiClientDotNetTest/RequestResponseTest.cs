@@ -16,7 +16,7 @@ namespace apiClientDotNetTest
         [TestMethod]
         public void ChatBotTest()
         {
-            SymBotClient symBotClient = new SymBotClient();
+           /* SymBotClient symBotClient = new SymBotClient();
             DatafeedEventsService datafeedEventsService = new DatafeedEventsService();
             SymConfig symConfig = symBotClient.initBot("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
             RoomListener botLogic = new BotLogic();
@@ -24,10 +24,10 @@ namespace apiClientDotNetTest
             Datafeed datafeed = datafeedEventsService.createDatafeed(symConfig, datafeedClient);
             datafeedEventsService.addRoomListener(botLogic);
             RunAsync().GetAwaiter();
-            datafeedEventsService.getEventsFromDatafeed(symConfig, datafeed, datafeedClient);
+            datafeedEventsService.getEventsFromDatafeed(symConfig, datafeed, datafeedClient);*/
         }
 
-        static async Task<Boolean> RunAsync()
+        /*static async Task<Boolean> RunAsync()
         {
             System.Threading.Thread.Sleep(5000);
             SymBotClient symBotClient = new SymBotClient();
@@ -60,7 +60,7 @@ namespace apiClientDotNetTest
             public void onRoomUpdated(RoomUpdated roomUpdated) { }
             public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) { }
             public void onUserLeftRoom(UserLeftRoom userLeftRoom) { }
-        }
+        }*/
 
 
     }

@@ -5,13 +5,13 @@
 
     <IsPackable>false</IsPackable>
 
-    <PackageId>symphony-apiclient-dotnet</PackageId>
+    <PackageId>symphony-apiclient-dotnet-test</PackageId>
 
     <Authors>Platform Solutions</Authors>
 
     <Company>Symphont LLC</Company>
 
-    <Product>SymphonyApiClientDontNet</Product>
+    <Product>SymphonyApiClientDotNetTest</Product>
 
     <PackageProjectUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet</PackageProjectUrl>
 
