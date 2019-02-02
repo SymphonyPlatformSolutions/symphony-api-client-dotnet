@@ -8,24 +8,24 @@ namespace apiClientDotNet.Models
     public class OutboundImportMessage
     {
         [JsonProperty("message")]
-        public String message { get; set; }
+        private String message { get; set; }
 
         [JsonProperty("data")]
-        public String data { get; set; }
+        private String data { get; set; }
 
         [JsonProperty("intendedMessageTimestamp")]
-        public long intendedMessageTimestamp { get; set; }
+        private long intendedMessageTimestamp { get; set; }
 
         [JsonProperty("intendedMessageFromUserId")]
-        public long intendedMessageFromUserId { get; set; }
+        private long intendedMessageFromUserId { get; set; }
 
         [JsonProperty("originatingSystemId")]
-        public String originatingSystemId { get; set; }
+        private String originatingSystemId { get; set; }
 
         [JsonProperty("originalMessageId")]
-        public String originalMessageId { get; set; }
+        private String originalMessageId { get; set; }
 
         [JsonProperty("streamId")]
-        public String streamId { get; set; }
+        private String streamId { get; set; }
     }
 }

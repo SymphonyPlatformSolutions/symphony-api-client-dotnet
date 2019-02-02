@@ -32,17 +32,14 @@ namespace apiClientDotNetTest
         [TestMethod]
         public void DatafeedCreateTest()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-            apiClientDotNet.Authentication.SymBotAuth botAuth = new apiClientDotNet.Authentication.SymBotAuth(symConfig);
-            botAuth.authenticate();
-            SymBotClient botClient = SymBotClient.initBot(symConfig, botAuth);
-            DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
+            /*SymBotClient symBotClient = new SymBotClient();
+            DatafeedEventsService datafeedEventsService = new DatafeedEventsService();
+            SymConfig symConfig = symBotClient.initBot("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
+            RoomListener botLogic = new BotLogic();
+            DatafeedClient datafeedClient = datafeedEventsService.init(symConfig);
+            Datafeed datafeed = datafeedEventsService.createDatafeed(symConfig, datafeedClient);
 
-            datafeedEventsService.getEventsFromDatafeed();
-
-            Assert.IsTrue(datafeedEventsService.datafeedId != null);
+            Assert.IsTrue(datafeed.datafeedID != null);*/
         }
     }
 }

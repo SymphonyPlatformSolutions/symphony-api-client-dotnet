@@ -8,22 +8,22 @@ namespace apiClientDotNet.Models
     public class StreamListItem
     {
         [JsonProperty("id")]
-        public String id { get; set; }
+        private String id { get; set; }
 
         [JsonProperty("crossPod")]
-        public Boolean crossPod { get; set; }
+        private Boolean crossPod { get; set; }
 
         [JsonProperty("active")]
-        public Boolean active { get; set; }
+        private Boolean active { get; set; }
 
         [JsonProperty("streamType")]
-        public TypeObject streamType { get; set; }
+        private TypeObject streamType { get; set; }
 
         [JsonProperty("streamAttributes")]
-        public StreamAttributes streamAttributes { get; set; }
+        private StreamAttributes streamAttributes { get; set; }
 
         [JsonProperty("roomAttributes")]
-        public RoomName roomAttributes { get; set; }
+        private RoomName roomAttributes { get; set; }
 
     }
 }

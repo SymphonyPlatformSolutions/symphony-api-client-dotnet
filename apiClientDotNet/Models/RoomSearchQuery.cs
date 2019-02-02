@@ -8,24 +8,24 @@ namespace apiClientDotNet.Models
     public class RoomSearchQuery
     {
         [JsonProperty("query")]
-        public String query { get; set; }
+        private String query { get; set; }
 
         [JsonProperty("labels")]
-        public List<String> labels { get; set; }
+        private List<String> labels { get; set; }
 
         [JsonProperty("active")]
-        public Boolean active { get; set; }
+        private Boolean active { get; set; }
 
-        [JsonProperty("private")]
-        public Boolean isPrivate { get; set; }
+        [JsonProperty("isPrivate")]
+        private Boolean isPrivate { get; set; }
 
         [JsonProperty("creator")]
-        public NumericId creator { get; set; }
+        private NumericId creator { get; set; }
 
         [JsonProperty("owner")]
-        public NumericId owner { get; set; }
+        private NumericId owner { get; set; }
 
         [JsonProperty("member")]
-        public NumericId member { get; set; }
+        private NumericId member { get; set; }
     }
 }

@@ -9,37 +9,37 @@ namespace apiClientDotNet.Models
     public class AdminStreamAttributes
     {
         [JsonProperty("description")]
-        public String description { get; set; }
+        private String description { get; set; }
 
         [JsonProperty("roomName")]
-        public String roomName { get; set; }
+        private String roomName { get; set; }
 
         [JsonProperty("roomDescription")]
-        public String roomDescription { get; set; }
+        private String roomDescription { get; set; }
 
         [JsonProperty("members")]
-        public List<long> members { get; set; }
+        private List<long> members { get; set; }
 
         [JsonProperty("createdByUserId")]
-        public long createdByUserId { get; set; }
+        private long createdByUserId { get; set; }
 
         [JsonProperty("createdDate")]
-        public long createdDate { get; set; }
+        private long createdDate { get; set; }
 
         [JsonProperty("lastModifiedDate")]
-        public long lastModifiedDate { get; set; }
+        private long lastModifiedDate { get; set; }
 
         [JsonProperty("originCompany")]
-        public String originCompany { get; set; }
+        private String originCompany { get; set; }
 
         [JsonProperty("originCompanyId")]
-        public int originCompanyId { get; set; }
+        private int originCompanyId { get; set; }
 
         [JsonProperty("membersCount")]
-        public int membersCount { get; set; }
+        private int membersCount { get; set; }
 
         [JsonProperty("lastMessageDate")]
-        public long lastMessageDate { get; set; }
+        private long lastMessageDate { get; set; }
 
     }
 }

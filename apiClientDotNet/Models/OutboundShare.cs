@@ -9,42 +9,42 @@ namespace apiClientDotNet.Models
     {
 
         [JsonProperty("articleId")]
-        public String articleId { get; set; }
+        private String articleId { get; set; }
 
         [JsonProperty("title")]
-        public String title { get; set; }
+        private String title { get; set; }
 
         [JsonProperty("subTitle")]
-        public String subTitle { get; set; }
+        private String subTitle { get; set; }
 
         [JsonProperty("message")]
-        public String message { get; set; }
+        private String message { get; set; }
 
         [JsonProperty("publisher")]
-        public String publisher { get; set; }
+        private String publisher { get; set; }
 
         [JsonProperty("publishDate")]
-        public long publishDate { get; set; }
+        private long publishDate { get; set; }
 
         [JsonProperty("thumbnailUrl")]
-        public String thumbnailUrl { get; set; }
+        private String thumbnailUrl { get; set; }
 
         [JsonProperty("author")]
-        public String author { get; set; }
+        private String author { get; set; }
 
         [JsonProperty("articleUrl")]
-        public String articleUrl { get; set; }
+        private String articleUrl { get; set; }
 
         [JsonProperty("summary")]
-        public String summary { get; set; }
+        private String summary { get; set; }
 
         [JsonProperty("appId")]
-        public String appId { get; set; }
+        private String appId { get; set; }
 
         [JsonProperty("appName")]
-        public String appName { get; set; }
+        private String appName { get; set; }
 
         [JsonProperty("appIconUrl")]
-        public String appIconUrl { get; set; }
+        private String appIconUrl { get; set; }
     }
 }

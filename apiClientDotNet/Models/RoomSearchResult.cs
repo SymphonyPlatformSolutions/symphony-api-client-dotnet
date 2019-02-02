@@ -8,19 +8,19 @@ namespace apiClientDotNet.Models
     public class RoomSearchResult
     {
         [JsonProperty("count")]
-        public int count { get; set; }
+        private int count { get; set; }
 
         [JsonProperty("skip")]
-        public int skip { get; set; }
+        private int skip { get; set; }
 
         [JsonProperty("limit")]
-        public int limit { get; set; }
+        private int limit { get; set; }
 
         [JsonProperty("query")]
-        public RoomSearchQuery query { get; set; }
+        private RoomSearchQuery query { get; set; }
 
         [JsonProperty("rooms")]
-        public List<RoomInfo> rooms { get; set; }
+        private List<RoomInfo> rooms { get; set; }
 
     }
 }

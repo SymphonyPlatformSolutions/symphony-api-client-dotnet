@@ -8,22 +8,22 @@ namespace apiClientDotNet.Models
     public class UserSearchResult
     {
         [JsonProperty("count")]
-        public int count { get; set; }
+        private int count { get; set; }
 
         [JsonProperty("skip")]
-        public int skip { get; set; }
+        private int skip { get; set; }
 
         [JsonProperty("query")]
-        public String query { get; set; }
+        private String query { get; set; }
 
         [JsonProperty("filters")]
-        public Dictionary<String, String> filters { get; set; }
+        private Dictionary<String, String> filters { get; set; }
 
         [JsonProperty("users")]
-        public List<UserInfo> users { get; set; }
+        private List<UserInfo> users { get; set; }
 
         [JsonProperty("limit")]
-        public int limit { get; set; }
+        private int limit { get; set; }
 
     }
 }

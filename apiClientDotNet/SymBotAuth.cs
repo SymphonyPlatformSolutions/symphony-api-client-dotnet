@@ -11,33 +11,24 @@ using apiClientDotNet.Utils;
 
 
 
-namespace apiClientDotNet.Authentication
+namespace apiClientDotNet
 {   
  
-    public class SymBotAuth : ISymAuth
+    public class SymBotAuth
     {
 
         AuthTokens authTokens;
-        private String sessionToken;
-        private String kmToken;
-        private SymConfig symConfig;
-        //private Client sessionAuthClient;
-        //private Client kmAuthClient;
 
-        public SymBotAuth(SymConfig config)
-        {
-            symConfig = config;
-        }
-
-            public void authenticate()
+        public AuthTokens authenticate(SymConfig symConfig)
         {
             authTokens = new AuthTokens();
-            sessionAuthenticate();
-            kmAuthenticate();
+            sessionAuth(symConfig);
+            keyManagerAuth(symConfig);
             symConfig.authTokens = authTokens;
+            return authTokens;
         }
 
-        public void sessionAuthenticate()
+        private void sessionAuth(SymConfig symConfig)
         {
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + "/sessionauth/v1/authenticate";
@@ -45,11 +36,10 @@ namespace apiClientDotNet.Authentication
             string body = restRequestHandler.ReadResponse(resp);
             JObject o = JObject.Parse(body);
             authTokens.sessionToken = (string)o["token"];
-            sessionToken = authTokens.sessionToken;
           
         }
 
-        public void kmAuthenticate()
+        private void keyManagerAuth(SymConfig symConfig)
         {
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = "https://" + symConfig.keyAuthHost + ":" + symConfig.keyAuthPort + "/keyauth/v1/authenticate";
@@ -57,33 +47,6 @@ namespace apiClientDotNet.Authentication
             string body = restRequestHandler.ReadResponse(resp);
             JObject o = JObject.Parse(body);
             authTokens.keyManagerToken = (string)o["token"];
-            kmToken = authTokens.keyManagerToken;
-
-        }
-
-        public String getSessionToken()
-        {
-            return sessionToken;
-
-        }
-
-        public void setSessionToken(String sessionToken)
-        {
-
-        }
-
-        public String getKmToken()
-        {
-            return kmToken;
-        }
-
-        public void setKmToken(String kmToken)
-        {
-
-        }
-
-        public void logout()
-        {
 
         }
     }

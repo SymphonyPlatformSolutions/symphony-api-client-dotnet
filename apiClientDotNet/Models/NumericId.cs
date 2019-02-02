@@ -8,7 +8,7 @@ namespace apiClientDotNet.Models
     public class NumericId
     {
     
-        [JsonProperty("id")]
+        [JsonProperty("NumericId")]
         public long id { get; set; }
     }
 }

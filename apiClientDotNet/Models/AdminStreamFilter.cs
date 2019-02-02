@@ -8,24 +8,24 @@ namespace apiClientDotNet.Models
     public class AdminStreamFilter
     {
         [JsonProperty("streamTypes")]
-        public List<String> streamTypes { get; set; }
+        private List<String> streamTypes { get; set; }
 
         [JsonProperty("scope")]
-        public String scope { get; set; }
+        private String scope { get; set; }
 
         [JsonProperty("origin")]
-        public String origin { get; set; }
+        private String origin { get; set; }
 
         [JsonProperty("status")]
-        public String status { get; set; }
+        private String status { get; set; }
 
         [JsonProperty("privacy")]
-        public String privacy { get; set; }
+        private String privacy { get; set; }
 
         [JsonProperty("startDate")]
-        public long startDate { get; set; }
+        private long startDate { get; set; }
 
         [JsonProperty("endDate")]
-        public long endDate { get; set; }
+        private long endDate { get; set; }
     }
 }

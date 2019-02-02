@@ -9,7 +9,8 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using apiClientDotNet.Clients;
+
+
 
 namespace apiClientDotNet.Services
 {
@@ -21,21 +22,6 @@ namespace apiClientDotNet.Services
         private List<IMListener> IMListeners;
         private List<ConnectionListener> connectionListeners;
         private DatafeedClient datafeedClient;
-        private ISymClient botClient;
-        public String datafeedId;
-        public Datafeed datafeed;
-
-        public DatafeedEventsService(ISymClient client)
-        {
-            this.botClient = client;
-            roomListeners = new List<RoomListener>();
-            IMListeners = new List<IMListener>();
-            connectionListeners = new List<ConnectionListener>();
-            datafeedClient = new DatafeedClient();
-            datafeed = datafeedClient.createDatafeed(client.getConfig());
-            datafeedId = datafeed.datafeedID;
-
-        }
 
         public DatafeedClient init(SymConfig symConfig)
         {
@@ -58,17 +44,17 @@ namespace apiClientDotNet.Services
             stopLoop = true;
         }
 
-        public void getEventsFromDatafeed()
+        public void getEventsFromDatafeed(SymConfig symConfig, Datafeed datafeed, DatafeedClient datafeedClient)
         {
             List<DatafeedEvent> events = new List<DatafeedEvent>();
             while (!stopLoop)
             {
-                events = RunAsync(botClient.getConfig(), datafeed, datafeedClient).GetAwaiter().GetResult();
+                events = RunAsync(symConfig, datafeed, datafeedClient).GetAwaiter().GetResult();
                 if (events != null)
                 {
                     handleEvents(events);
                 }
-                getEventsFromDatafeed();
+                getEventsFromDatafeed(symConfig, datafeed, datafeedClient);
             }
 
         }
@@ -114,7 +100,8 @@ namespace apiClientDotNet.Services
             }
             else if (response.StatusCode.Equals(HttpStatusCode.Forbidden) || response.StatusCode.Equals(HttpStatusCode.Unauthorized))
             {
-                //Add reauth 
+                SymBotAuth symBotAuth = new SymBotAuth();
+                symConfig.authTokens = symBotAuth.authenticate(symConfig);
                 stopLoop = true;
                 return null;
             }
