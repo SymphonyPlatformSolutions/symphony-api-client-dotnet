@@ -11,24 +11,33 @@ using apiClientDotNet.Utils;
 
 
 
-namespace apiClientDotNet
+namespace apiClientDotNet.Authentication
 {   
  
-    public class SymBotAuth
+    public class SymBotAuth : ISymAuth
     {
 
         AuthTokens authTokens;
+        private String sessionToken;
+        private String kmToken;
+        private SymConfig symConfig;
+        //private Client sessionAuthClient;
+        //private Client kmAuthClient;
 
-        public AuthTokens authenticate(SymConfig symConfig)
+        public SymBotAuth(SymConfig config)
         {
-            authTokens = new AuthTokens();
-            sessionAuth(symConfig);
-            keyManagerAuth(symConfig);
-            symConfig.authTokens = authTokens;
-            return authTokens;
+            symConfig = config;
         }
 
-        private void sessionAuth(SymConfig symConfig)
+            public void authenticate()
+        {
+            authTokens = new AuthTokens();
+            sessionAuthenticate();
+            kmAuthenticate();
+            symConfig.authTokens = authTokens;
+        }
+
+        public void sessionAuthenticate()
         {
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + "/sessionauth/v1/authenticate";
@@ -36,10 +45,11 @@ namespace apiClientDotNet
             string body = restRequestHandler.ReadResponse(resp);
             JObject o = JObject.Parse(body);
             authTokens.sessionToken = (string)o["token"];
+            sessionToken = authTokens.sessionToken;
           
         }
 
-        private void keyManagerAuth(SymConfig symConfig)
+        public void kmAuthenticate()
         {
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = "https://" + symConfig.keyAuthHost + ":" + symConfig.keyAuthPort + "/keyauth/v1/authenticate";
@@ -47,6 +57,33 @@ namespace apiClientDotNet
             string body = restRequestHandler.ReadResponse(resp);
             JObject o = JObject.Parse(body);
             authTokens.keyManagerToken = (string)o["token"];
+            kmToken = authTokens.keyManagerToken;
+
+        }
+
+        public String getSessionToken()
+        {
+            return sessionToken;
+
+        }
+
+        public void setSessionToken(String sessionToken)
+        {
+
+        }
+
+        public String getKmToken()
+        {
+            return kmToken;
+        }
+
+        public void setKmToken(String kmToken)
+        {
+
+        }
+
+        public void logout()
+        {
 
         }
     }

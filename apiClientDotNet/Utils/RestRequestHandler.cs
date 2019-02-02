@@ -9,6 +9,8 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace apiClientDotNet.Utils
 {
@@ -28,9 +30,11 @@ namespace apiClientDotNet.Utils
 
         public HttpWebResponse executeRequest(object data, String url, bool isAuth, string method, SymConfig symConfig, bool isAgent)
         {
-            if (data is Message && method == WebRequestMethods.Http.Post)
+            if ( method == WebRequestMethods.Http.Post && isAuth != true)
             {
-                postFormData(symConfig, url, data);
+                HttpWebResponse response = null;
+                response = postApi(symConfig, url, data, isAgent);
+                return response;
             }
 
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
@@ -58,6 +62,10 @@ namespace apiClientDotNet.Utils
                 byte[] cert = File.ReadAllBytes(symConfig.botCertPath + symConfig.botCertName + ".p12");
                 Certificates.Add(new X509Certificate2(cert, symConfig.botCertPassword));
                 req.ClientCertificates.AddRange(Certificates);
+                if (symConfig.authTokens != null)
+                {
+                    req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                }
             } else if (isAgent)
             {
                 req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
@@ -99,47 +107,85 @@ namespace apiClientDotNet.Utils
             return responseString;
         }
 
-     
 
-        private System.IO.Stream postFormData(SymConfig symConfig, string url, object data)
+        public HttpResponseMessage executePostFormRequest(object data, String url, SymConfig symConfig)
         {
-            Message message = (Message)data;
+            OutboundMessage message = (OutboundMessage)data;
             HttpContent stringContent = new StringContent(message.message);
-            // examples of converting both Stream and byte [] to HttpContent objects
-            // representing input type file
-           // HttpContent fileStreamContent = new StreamContent(fileStream);
-           // HttpContent bytesContent = new ByteArrayContent(fileBytes);
-
-            // Submit the form using HttpClient and 
-            // create form data as Multipart (enctype="multipart/form-data")
 
             using (var client = new HttpClient())
             using (var formData = new MultipartFormDataContent())
             {
-                // Add the HttpContent objects to the form data
-
-                // <input type="text" name="filename" />
                 formData.Add(stringContent, "message", "message");
-                // <input type="file" name="file1" />
-                //formData.Add(fileStreamContent, "file1", "file1");
-                // <input type="file" name="file2" />
-                //formData.Add(bytesContent, "file2", "file2");
+                if(message.attachments != null)
+                {
+                    foreach( FileStream attachment in message.attachments)
+                    {
+                        byte[] buffer = null;
+                        buffer = new byte[attachment.Length];
+                        attachment.Read(buffer, 0, (int)attachment.Length);
+                        HttpContent byteArrayContent = new ByteArrayContent(buffer);
 
-                // Invoke the request to the server
-
-                // equivalent to pressing the submit button on
-                // a form with attributes (action="{url}" method="post")
+                        byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
+                        String fileName = Path.GetFileName(attachment.Name);
+                        formData.Add(byteArrayContent, "attachment", fileName);
+                    }
+                }
+                        
                 client.DefaultRequestHeaders.Add("sessionToken", symConfig.authTokens.sessionToken);
-                client.DefaultRequestHeaders.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
+                if(symConfig.authTokens.keyManagerToken != null)
+                {
+                    client.DefaultRequestHeaders.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
+                }
                 var response = client.PostAsync(url, formData).Result;
 
                 // ensure the request was a success
                 if (!response.IsSuccessStatusCode)
                 {
+                    Debug.WriteLine(response.ToString());
                     return null;
                 }
-                return response.Content.ReadAsStreamAsync().Result;
+                return response;
             }
+        }
+
+      
+
+        private HttpWebResponse postApi(SymConfig symConfig, string url, object data, bool isAgent)
+        {
+            System.Uri targetUri = new System.Uri(url);
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(targetUri);
+            request.Method = "Post";
+            request.ContentType = "application/json";
+            request.Accept = "application/json";
+
+            //request.Headers["Pragma"] = "no-cache";           
+            var json = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(data, Formatting.Indented));
+            if (isAgent)
+            {
+                request.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                request.Headers.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
+            }
+            else if (!isAgent)
+            {
+                request.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+            }
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            if (data != null)
+            {
+                request.ContentLength = json.Length;
+
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(json, 0, json.Length);
+                }
+
+            }
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            return response;
         }
     }
 }

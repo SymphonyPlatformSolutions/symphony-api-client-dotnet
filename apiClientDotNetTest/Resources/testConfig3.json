@@ -1,11 +1,11 @@
 ﻿{
-  "sessionAuthHost": "preview.symphony.com",
-  "sessionAuthPort": 8444,
-  "keyAuthHost": "preview.symphony.com",
-  "keyAuthPort": 8444,
-  "podHost": "preview.symphony.com",
+  "sessionAuthHost": "develop2-api.symphony.com",
+  "sessionAuthPort": 443,
+  "keyAuthHost": "develop2-api.symphony.com",
+  "keyAuthPort": 443,
+  "podHost": "develop2.symphony.com",
   "podPort": 443,
-  "agentHost": "preview.symphony.com",
+  "agentHost": "develop2.symphony.com",
   "agentPort": 443,
   "botCertPath": "C:/Users/Michael/Desktop/symphonyProjects/agent-sdk/atlas/symphony/global/certs/",
   "botCertName": "bot.user42",
@@ -25,5 +25,4 @@
   "botPrivateKeyName": "",
   "botUsername": ""
 }
-
 

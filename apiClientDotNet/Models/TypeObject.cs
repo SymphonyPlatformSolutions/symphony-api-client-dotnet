@@ -8,6 +8,6 @@ namespace apiClientDotNet.Models
     public class TypeObject
     {
         [JsonProperty("type")]
-        private String type { get; set; }
+        public String type { get; set; }
     }
 }

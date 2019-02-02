@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace apiClientDotNet.Models
 {
@@ -14,7 +15,7 @@ namespace apiClientDotNet.Models
         public string data { get; set; }
 
         [JsonProperty("attachments")]
-        public List<Attachment> attachments { get; set; }
+        public List<FileStream> attachments { get; set; }
 
     }
 }
