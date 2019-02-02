@@ -8,15 +8,15 @@ namespace apiClientDotNet.Models
     public class InboundImportMessage
     {
         [JsonProperty("messageId")]
-        private String messageId { get; set; }
+        public String messageId { get; set; }
 
         [JsonProperty("originatingSystemId")]
-        private String originatingSystemId { get; set; }
+        public String originatingSystemId { get; set; }
 
         [JsonProperty("originalMessageId")]
-        private String originalMessageId { get; set; }
+        public String originalMessageId { get; set; }
 
         [JsonProperty("diagnostic")]
-        private String diagnostic { get; set; }
+        public String diagnostic { get; set; }
     }
 }

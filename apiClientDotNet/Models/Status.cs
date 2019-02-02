@@ -5,10 +5,9 @@ using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
-    public class NumericId
+    public class Status
     {
-    
-        [JsonProperty("id")]
-        public long id { get; set; }
+        [JsonProperty("status")]
+        public String status { get; set; }
     }
 }

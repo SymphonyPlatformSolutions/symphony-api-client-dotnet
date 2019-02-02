@@ -8,12 +8,12 @@ namespace apiClientDotNet.Models
     public class SuppressionResult
     {
         [JsonProperty("messageId")]
-        private String messageId { get; set; }
+        public String messageId { get; set; }
 
         [JsonProperty("suppressed")]
-        private Boolean suppressed { get; set; }
+        public Boolean suppressed { get; set; }
 
         [JsonProperty("suppressionDate")]
-        private long suppressionDate { get; set; }
+        public long suppressionDate { get; set; }
     }
 }

@@ -8,13 +8,13 @@ namespace apiClientDotNet.Models
     public class UserFilter
     {
         [JsonProperty("title")]
-        private String title { get; set; }
+        public String title { get; set; }
 
         [JsonProperty("location")]
-        private String location { get; set; }
+        public String location { get; set; }
 
         [JsonProperty("company")]
-        private String company { get; set; }
+        public String company { get; set; }
 
     }
 }
