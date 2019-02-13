@@ -5,12 +5,11 @@ using apiClientDotNet.Services;
 using apiClientDotNet.Models;
 using apiClientDotNet.Clients;
 using apiClientDotNet.Authentication;
-
-namespace apiClientDotNet
+namespace apiClientDotNet.Clients
 {
-    public class SymBotClient : ISymClient
+    public class SymOBOClient : ISymClient
     {
-        private static SymBotClient botClient;
+        private static SymOBOClient botClient;
         private SymConfig config;
         private ISymAuth symBotAuth;
         private DatafeedEventsService datafeedEventsService;
@@ -21,35 +20,24 @@ namespace apiClientDotNet
         private ConnectionsClient connectionsClient;
         private SignalsClient signalsClient;
 
-        public static SymBotClient initBot(SymConfig config, ISymAuth symBotAuth)
+        public static SymOBOClient initOBOClient(SymConfig config, ISymAuth symBotAuth)
         {
-            if (botClient == null)
-            {
-                botClient = new SymBotClient(config, symBotAuth);
-                return botClient;
-            }
+            botClient = new SymOBOClient(config, symBotAuth);
             return botClient;
         }
 
-        private SymBotClient(SymConfig config, ISymAuth symBotAuth)
+        private SymOBOClient(SymConfig config, ISymAuth symBotAuth)
         {
-            this.config = config;
             this.symBotAuth = symBotAuth;
+            this.config = config;
         }
 
-        private SymBotClient(SymConfig config, SymBotAuth symBotAuth)//, ClientConfig podClientConfig, ClientConfig agentClientConfig)
-        {
-            this.config = config;
-            this.symBotAuth = symBotAuth;
-            //this.podClient = ClientBuilder.newClient(podClientConfig);
-            //this.agentClient = ClientBuilder.newClient(agentClientConfig);
-            
-        }
+       
         public DatafeedEventsService getDatafeedEventsService()
         {
             if (datafeedEventsService == null)
             {
-               datafeedEventsService = new DatafeedEventsService(this);
+                datafeedEventsService = new DatafeedEventsService(this);
             }
             return datafeedEventsService;
         }
