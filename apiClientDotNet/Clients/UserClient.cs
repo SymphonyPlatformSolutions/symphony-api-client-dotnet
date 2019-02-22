@@ -216,5 +216,19 @@ namespace apiClientDotNet.Clients
             return result;
         }
 
+        public UserInfo getSessionUser(){
+
+            SymConfig symConfig = botClient.getConfig();
+            UserInfo info = null;
+            RestRequestHandler restRequestHandler = new RestRequestHandler();
+            string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETSESSIONUSER;
+            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, false);
+            if (resp.StatusCode == HttpStatusCode.OK)
+            {
+                string body = restRequestHandler.ReadResponse(resp);
+                info = JsonConvert.DeserializeObject<UserInfo>(body);
+            }
+            return info;
+        }
     }
 }

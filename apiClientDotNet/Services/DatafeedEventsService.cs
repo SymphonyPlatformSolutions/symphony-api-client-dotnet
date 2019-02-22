@@ -21,11 +21,11 @@ namespace apiClientDotNet.Services
         private List<IMListener> IMListeners;
         private List<ConnectionListener> connectionListeners;
         private DatafeedClient datafeedClient;
-        private ISymClient botClient;
+        private SymBotClient botClient;
         public String datafeedId;
         public Datafeed datafeed;
 
-        public DatafeedEventsService(ISymClient client)
+        public DatafeedEventsService(SymBotClient client)
         {
             this.botClient = client;
             roomListeners = new List<RoomListener>();
@@ -131,118 +131,121 @@ namespace apiClientDotNet.Services
         {
             foreach (DatafeedEvent eventv4 in datafeedEvents)
             {
-                switch (eventv4.type)
+                if(eventv4.initiator.user.userId != botClient.getBotUserInfo().id)
                 {
-                    case "MESSAGESENT":
+                    switch (eventv4.type)
+                    {
+                        case "MESSAGESENT":
 
-                        MessageSent messageSent = eventv4.payload.messageSent;
-                        if (messageSent.message.stream.streamType.Equals("ROOM"))
-                        {
+                            MessageSent messageSent = eventv4.payload.messageSent;
+                            if (messageSent.message.stream.streamType.Equals("ROOM"))
+                            {
+                                foreach (RoomListener listener in roomListeners)
+                                {
+                                    listener.onRoomMessage(messageSent.message);
+                                }
+                            }
+                            else
+                            {
+                                foreach (IMListener listener in IMListeners)
+                                {
+                                    listener.onIMMessage(messageSent.message);
+                                }
+                            }
+                            break;
+                        case "INSTANTMESSAGECREATED":
+
+                            foreach (IMListener listeners in IMListeners)
+                            {
+                                listeners.onIMCreated(eventv4.payload.instantMessageCreated.stream);
+                            }
+                            break;
+
+                        case "ROOMCREATED":
+
                             foreach (RoomListener listener in roomListeners)
                             {
-                                listener.onRoomMessage(messageSent.message);
+                                listener.onRoomCreated(eventv4.payload.roomCreated);
                             }
-                        }
-                        else
-                        {
-                            foreach (IMListener listener in IMListeners)
+                            break;
+
+                        case "ROOMUPDATED":
+
+                            foreach (RoomListener listener in roomListeners)
                             {
-                                listener.onIMMessage(messageSent.message);
+                                listener.onRoomUpdated(eventv4.payload.roomUpdated);
                             }
-                        }
-                        break;
-                    case "INSTANTMESSAGECREATED":
+                            break;
 
-                        foreach (IMListener listeners in IMListeners)
-                        {
-                            listeners.onIMCreated(eventv4.payload.instantMessageCreated.stream);
-                        }
-                        break;
+                        case "ROOMDEACTIVATED":
 
-                    case "ROOMCREATED":
+                            foreach (RoomListener listener in roomListeners)
+                            {
+                                listener.onRoomDeactivated(eventv4.payload.roomDeactivated);
+                            }
+                            break;
 
-                        foreach (RoomListener listener in roomListeners)
-                        {
-                            listener.onRoomCreated(eventv4.payload.roomCreated);
-                        }
-                        break;
+                        case "ROOMREACTIVATED":
 
-                    case "ROOMUPDATED":
+                            foreach (RoomListener listener in roomListeners)
+                            {
+                                listener.onRoomReactivated(eventv4.payload.roomReactivated.stream);
+                            }
+                            break;
 
-                        foreach (RoomListener listener in roomListeners)
-                        {
-                            listener.onRoomUpdated(eventv4.payload.roomUpdated);
-                        }
-                        break;
+                        case "USERJOINEDROOM":
 
-                    case "ROOMDEACTIVATED":
+                            foreach (RoomListener listener in roomListeners)
+                            {
+                                listener.onUserJoinedRoom(eventv4.payload.userJoinedRoom);
+                            }
+                            break;
 
-                        foreach (RoomListener listener in roomListeners)
-                        {
-                            listener.onRoomDeactivated(eventv4.payload.roomDeactivated);
-                        }
-                        break;
+                        case "USERLEFTROOM":
 
-                    case "ROOMREACTIVATED":
+                            foreach (RoomListener listener in roomListeners)
+                            {
+                                listener.onUserLeftRoom(eventv4.payload.userLeftRoom);
+                            }
+                            break;
 
-                        foreach (RoomListener listener in roomListeners)
-                        {
-                            listener.onRoomReactivated(eventv4.payload.roomReactivated.stream);
-                        }
-                        break;
+                        case "ROOMMEMBERPROMOTEDTOOWNER":
 
-                    case "USERJOINEDROOM":
+                            foreach (RoomListener listener in roomListeners)
+                            {
+                                listener.onRoomMemberPromotedToOwner(eventv4.payload.roomMemberPromotedToOwner);
+                            }
+                            break;
 
-                        foreach (RoomListener listener in roomListeners)
-                        {
-                            listener.onUserJoinedRoom(eventv4.payload.userJoinedRoom);
-                        }
-                        break;
+                        case "ROOMMEMBERDEMOTEDFROMOWNER":
 
-                    case "USERLEFTROOM":
+                            foreach (RoomListener listener in roomListeners)
+                            {
+                                listener.onRoomMemberDemotedFromOwner(eventv4.payload.roomMemberDemotedFromOwner);
+                            }
+                            break;
 
-                        foreach (RoomListener listener in roomListeners)
-                        {
-                            listener.onUserLeftRoom(eventv4.payload.userLeftRoom);
-                        }
-                        break;
+                        case "CONNECTIONACCEPTED":
 
-                    case "ROOMMEMBERPROMOTEDTOOWNER":
+                            foreach (ConnectionListener listener in connectionListeners)
+                            {
+                                listener.onConnectionAccepted(eventv4.payload.connectionAccepted.fromUser);
+                            }
+                            break;
 
-                        foreach (RoomListener listener in roomListeners)
-                        {
-                            listener.onRoomMemberPromotedToOwner(eventv4.payload.roomMemberPromotedToOwner);
-                        }
-                        break;
+                        case "CONNECTIONREQUESTED":
 
-                    case "ROOMMEMBERDEMOTEDFROMOWNER":
+                            foreach (ConnectionListener listener in connectionListeners)
+                            {
+                                listener.onConnectionRequested(eventv4.payload.connectionRequested.toUser);
+                            }
+                            break;
 
-                        foreach (RoomListener listener in roomListeners)
-                        {
-                            listener.onRoomMemberDemotedFromOwner(eventv4.payload.roomMemberDemotedFromOwner);
-                        }
-                        break;
+                        default:
+                            break;
 
-                    case "CONNECTIONACCEPTED":
-
-                        foreach (ConnectionListener listener in connectionListeners)
-                        {
-                            listener.onConnectionAccepted(eventv4.payload.connectionAccepted.fromUser);
-                        }
-                        break;
-
-                    case "CONNECTIONREQUESTED":
-
-                        foreach (ConnectionListener listener in connectionListeners)
-                        {
-                            listener.onConnectionRequested(eventv4.payload.connectionRequested.toUser);
-                        }
-                        break;
-
-                    default:
-                        break;
-
-                }
+                    }
+                }  
             }
         }
 

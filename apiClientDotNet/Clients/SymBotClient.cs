@@ -20,6 +20,7 @@ namespace apiClientDotNet
         private UserClient userClient;
         private ConnectionsClient connectionsClient;
         private SignalsClient signalsClient;
+        private UserInfo botUserInfo;
 
         public static SymBotClient initBot(SymConfig config, ISymAuth symBotAuth)
         {
@@ -116,6 +117,14 @@ namespace apiClientDotNet
                 signalsClient = new SignalsClient(this);
             }
             return signalsClient;
+        }
+
+        public UserInfo getBotUserInfo(){
+            if (botUserInfo == null)
+            {
+                botUserInfo = botClient.getUsersClient().getSessionUser();
+            }
+            return botUserInfo;
         }
     }
 }
