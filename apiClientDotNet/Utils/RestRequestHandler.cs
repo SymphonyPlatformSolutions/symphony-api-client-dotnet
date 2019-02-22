@@ -5,7 +5,6 @@ using apiClientDotNet.Models;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
 using System.Collections.Specialized;
-using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http;
@@ -36,7 +35,6 @@ namespace apiClientDotNet.Utils
                 response = postApi(symConfig, url, data, isAgent);
                 return response;
             }
-
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
             if (symConfig.sessionProxyURL.Length > 0 && url.Contains("sessionauth"))
             {
@@ -45,26 +43,43 @@ namespace apiClientDotNet.Utils
                 sessionProxy.Address=sessionProxyUri;
                 sessionProxy.Credentials = new NetworkCredential(symConfig.sessionProxyUsername, symConfig.sessionProxyPassword);
                 req.Proxy = sessionProxy;
-            } else if (symConfig.proxyURL.Length > 0 && (url.Contains("pod") || url.Contains("sessionauth")))
+            } else if (symConfig.proxyURL.Length > 0 && (url.Contains("pod") || url.Contains("sessionauth") || url.EndsWith("/login/pubkey/authenticate")))
             {
                 WebProxy proxy = new WebProxy();
                 Uri proxyUri = new Uri(symConfig.proxyURL);
                 proxy.Address = proxyUri;
                 proxy.Credentials = new NetworkCredential(symConfig.proxyUsername, symConfig.proxyPassword);
                 req.Proxy = proxy;
-
             }
             req.Credentials = CredentialCache.DefaultCredentials;
             req.Method = method;
             if (isAuth)
             {
-                Certificates = new X509CertificateCollection();
-                byte[] cert = File.ReadAllBytes(symConfig.botCertPath + symConfig.botCertName + ".p12");
-                Certificates.Add(new X509Certificate2(cert, symConfig.botCertPassword));
-                req.ClientCertificates.AddRange(Certificates);
-                if (symConfig.authTokens != null)
+                //If RSAAuth
+                if (url.EndsWith("pubkey/authenticate"))
                 {
-                    req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                    req.Credentials = null;
+                    if (data != null)
+                    {
+                        var json = JsonConvert.SerializeObject(data);
+                        var jsonBytes = Encoding.ASCII.GetBytes(json);
+                        req.ContentLength = jsonBytes.Length;
+
+                        using (var stream = req.GetRequestStream())
+                        {
+                            stream.Write(jsonBytes, 0, jsonBytes.Length);
+                        }
+                    }
+                }
+                else {
+                    Certificates = new X509CertificateCollection();
+                    byte[] cert = File.ReadAllBytes(symConfig.botCertPath + symConfig.botCertName + ".p12");
+                    Certificates.Add(new X509Certificate2(cert, symConfig.botCertPassword));
+                    req.ClientCertificates.AddRange(Certificates);
+                    if (symConfig.authTokens != null)
+                    {
+                        req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                    }
                 }
             } else if (isAgent)
             {
@@ -73,9 +88,7 @@ namespace apiClientDotNet.Utils
             } else if (!isAgent)
             {
                 req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
-            }
-            
-                
+            }   
 
             //req.Proxy = Proxy;
 

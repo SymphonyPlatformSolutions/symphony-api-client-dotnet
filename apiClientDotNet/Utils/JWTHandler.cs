@@ -21,6 +21,7 @@ namespace apiClientDotNet.Utils
 {
     public class JWTHandler
     {
+        /*
         public string generateJWT(SymConfig config)
         {
             string jwt = "";
@@ -33,7 +34,7 @@ namespace apiClientDotNet.Utils
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var certificate = new X509Certificate2(config.botPrivateKeyPath + config.botPrivateKeyName, "changeit");
+            var certificate = new X509Certificate2(config.botPrivateKeyPath + config.botPrivateKeyName);
             var securityKey = new Microsoft.IdentityModel.Tokens.X509SecurityKey(certificate);
             var credentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512);
             var header = new JwtHeader(credentials);
@@ -45,8 +46,9 @@ namespace apiClientDotNet.Utils
             return tokenString;
         
         }
+        */
 
-        public string generateJoseJWT(SymConfig config)
+        public string generateJWT(SymConfig config)
         {
             string jwt = "";
 

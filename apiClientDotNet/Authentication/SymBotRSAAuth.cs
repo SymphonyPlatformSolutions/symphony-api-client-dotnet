@@ -19,6 +19,7 @@ namespace apiClientDotNet.Authentication
 
         public SymBotRSAAuth(SymConfig config) {
             this.symConfig = config;
+            this.authTokens = new AuthTokens();
         }
         
         public void authenticate() {
@@ -26,7 +27,7 @@ namespace apiClientDotNet.Authentication
             jwt = jwtHandler.generateJWT(symConfig);
             sessionAuthenticate();
             kmAuthenticate();
-
+            symConfig.authTokens = authTokens;
         }
         
         public void sessionAuthenticate() {
@@ -38,9 +39,8 @@ namespace apiClientDotNet.Authentication
             HttpWebResponse resp = restRequestHandler.executeRequest(token, url, true, WebRequestMethods.Http.Post, symConfig, false);
             string body = restRequestHandler.ReadResponse(resp);
             JObject o = JObject.Parse(body);
-            authTokens.sessionToken = (string)o["token"];
-            sessionToken = authTokens.sessionToken;
-            
+            authTokens.sessionToken = (string) o.SelectToken("token");
+            sessionToken = authTokens.sessionToken;    
         }
 
         public void kmAuthenticate() {
@@ -48,11 +48,11 @@ namespace apiClientDotNet.Authentication
             Dictionary<String, String> token = new Dictionary<string, string>();
             token.Add("token", jwt);
             RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + AuthEndpointConstants.RSAKMAUTH;
+            string url = "https://" + symConfig.keyAuthHost + ":" + symConfig.keyAuthPort + AuthEndpointConstants.RSAKMAUTH;
             HttpWebResponse resp = restRequestHandler.executeRequest(token, url, true, WebRequestMethods.Http.Post, symConfig, false);
             string body = restRequestHandler.ReadResponse(resp);
             JObject o = JObject.Parse(body);
-            authTokens.keyManagerToken = (string)o["token"];
+            authTokens.keyManagerToken = (string) o.SelectToken("token");
             kmToken = authTokens.keyManagerToken;
         }
 
