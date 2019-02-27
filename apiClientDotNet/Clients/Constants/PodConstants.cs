@@ -52,6 +52,6 @@ namespace apiClientDotNet.Clients.Constants
         public static String ADMINCREATEUSER =  POD +"/v2/admin/user/create";
         public static String ADMINUPDATEUSER = POD +"/v2/admin/user/{uid}/update";
         public static String ADMINUPDATEAVATAR = POD + "/v1/admin/user/{uid}/avatar/update";
-
+        public static String GETSESSIONUSER = POD + "/v2/sessioninfo";
     }
 }

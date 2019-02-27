@@ -32,16 +32,6 @@ namespace apiClientDotNet.Clients
             this.config = config;
         }
 
-       
-        public DatafeedEventsService getDatafeedEventsService()
-        {
-            if (datafeedEventsService == null)
-            {
-                datafeedEventsService = new DatafeedEventsService(this);
-            }
-            return datafeedEventsService;
-        }
-
         public SymConfig getConfig()
         {
             return config;
