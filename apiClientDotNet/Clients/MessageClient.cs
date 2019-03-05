@@ -31,6 +31,9 @@ namespace apiClientDotNet
             {
                 symConfig.authTokens.sessionToken = botClient.getSymAuth().getSessionToken();
             }
+            if (appendTags && message.message != null) {
+                message.message = "<messageML>" + message.message + "</messageML>";
+            }
             HttpResponseMessage resp = restRequestHandler.executePostFormRequest(message, url, symConfig);
             InboundMessage inboundMessage = JsonConvert.DeserializeObject<InboundMessage>(resp.Content.ReadAsStringAsync().Result);
             return inboundMessage;

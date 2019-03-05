@@ -27,7 +27,7 @@ namespace apiClientDotNetTest
             SymConfigLoader symConfigLoader = new SymConfigLoader();
             symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
             JWTHandler jwtHandler = new JWTHandler();
-            jwtHandler.generateJoseJWT(symConfig);
+            jwtHandler.generateJWT(symConfig);
         }
     }
 }
