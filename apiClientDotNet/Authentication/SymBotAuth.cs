@@ -43,10 +43,10 @@ namespace apiClientDotNet.Authentication
             string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + "/sessionauth/v1/authenticate";
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, symConfig, false);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             JObject o = JObject.Parse(body);
             authTokens.sessionToken = (string)o["token"];
             sessionToken = authTokens.sessionToken;
-          
         }
 
         public void kmAuthenticate()
@@ -55,6 +55,7 @@ namespace apiClientDotNet.Authentication
             string url = "https://" + symConfig.keyAuthHost + ":" + symConfig.keyAuthPort + "/keyauth/v1/authenticate";
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, symConfig, false);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             JObject o = JObject.Parse(body);
             authTokens.keyManagerToken = (string)o["token"];
             kmToken = authTokens.keyManagerToken;

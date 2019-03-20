@@ -45,6 +45,7 @@ namespace apiClientDotNet.Authentication
             string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + AuthEndpointConstants.SESSIONAPPAUTH;
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, symConfig, false);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             JObject o = JObject.Parse(body);
             authTokens.sessionToken = (string)o["token"];
             sessionToken = authTokens.sessionToken;

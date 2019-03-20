@@ -32,6 +32,7 @@ namespace apiClientDotNet.Clients
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, false);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
@@ -39,7 +40,7 @@ namespace apiClientDotNet.Clients
                 string body = restRequestHandler.ReadResponse(resp);
                 info = JsonConvert.DeserializeObject<UserInfo>(body);
             }
-          
+            resp.Close();
             return info;
         }
 
@@ -52,6 +53,7 @@ namespace apiClientDotNet.Clients
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
@@ -59,7 +61,7 @@ namespace apiClientDotNet.Clients
                 string body = restRequestHandler.ReadResponse(resp);
                 info = JsonConvert.DeserializeObject<UserInfo>(body);
             }
-
+            resp.Close();
             return info;
         }
 
@@ -73,6 +75,7 @@ namespace apiClientDotNet.Clients
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
@@ -80,7 +83,7 @@ namespace apiClientDotNet.Clients
                 string body = restRequestHandler.ReadResponse(resp);
                 info = JsonConvert.DeserializeObject<UserInfo>(body);
             }
-
+            resp.Close();
             return info;
         }
 
@@ -143,9 +146,10 @@ namespace apiClientDotNet.Clients
 
             }
             url = url + "&local=" + local;
-         HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
@@ -153,8 +157,8 @@ namespace apiClientDotNet.Clients
                 string body = restRequestHandler.ReadResponse(resp);
                 infoList = JsonConvert.DeserializeObject<List<UserInfo>>(body);
             }
-       
-        return infoList;
+            resp.Close();
+            return infoList;
         }
 
         public UserSearchResult searchUsers(String query, Boolean local, int skip, int limit, UserFilter filter) {
@@ -205,6 +209,7 @@ namespace apiClientDotNet.Clients
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
@@ -212,7 +217,7 @@ namespace apiClientDotNet.Clients
                 string resbody = restRequestHandler.ReadResponse(resp);
                 result = JsonConvert.DeserializeObject<UserSearchResult>(resbody);
             }
-        
+            resp.Close();
             return result;
         }
 
@@ -228,6 +233,7 @@ namespace apiClientDotNet.Clients
                 string body = restRequestHandler.ReadResponse(resp);
                 info = JsonConvert.DeserializeObject<UserInfo>(body);
             }
+            resp.Close();
             return info;
         }
     }

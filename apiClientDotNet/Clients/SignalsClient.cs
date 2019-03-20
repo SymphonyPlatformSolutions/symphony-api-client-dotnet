@@ -54,9 +54,10 @@ namespace apiClientDotNet.Clients
             }
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             result = JsonConvert.DeserializeObject<List<Signal>>(body);
         
-        return result;
+            return result;
 
         }
 
@@ -68,6 +69,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.GETSIGNAL.Replace("{id}", id);
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             result = JsonConvert.DeserializeObject<Signal>(body);
 
             return result;
@@ -81,6 +83,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.CREATESIGNAL;
             HttpWebResponse resp = restRequestHandler.executeRequest(signal, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             result = JsonConvert.DeserializeObject<Signal>(body);
 
             return result;
@@ -94,6 +97,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.UPDATESIGNAL.Replace("{id}", signal.id);
             HttpWebResponse resp = restRequestHandler.executeRequest(signal, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             result = JsonConvert.DeserializeObject<Signal>(body);
 
             return result;
@@ -107,7 +111,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.DELETESIGNAL.Replace("{id}", id);
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
-            
+            resp.Close();
         }
 
         public SignalSubscriptionResult subscribeSignal(String id, Boolean self, List<long> uids, Boolean pushed)
@@ -118,16 +122,13 @@ namespace apiClientDotNet.Clients
             HttpWebResponse resp;
             if (self) {
                 string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.SUBSCRIBESIGNAL.Replace("{id}", id);
-                resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
-                
+                resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);               
              } else {
-
                 string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.SUBSCRIBESIGNAL.Replace("{id}", id) + "?pushed=" + pushed;
                 resp = restRequestHandler.executeRequest(uids, url, false, WebRequestMethods.Http.Post, symConfig, true);
-                
             }
-
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<SignalSubscriptionResult>(body);
         }
 
@@ -141,17 +142,15 @@ namespace apiClientDotNet.Clients
             {
                 string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.UNSUBSCRIBESIGNAL.Replace("{id}", id);
                 resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
-
             }
             else
             {
-
                 string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.UNSUBSCRIBESIGNAL.Replace("{id}", id);
                 resp = restRequestHandler.executeRequest(uids, url, false, WebRequestMethods.Http.Post, symConfig, true);
-
             }
 
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<SignalSubscriptionResult>(body);
         }
 
@@ -188,6 +187,7 @@ namespace apiClientDotNet.Clients
 
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<SignalSubscriberList>(body);
         }
     }

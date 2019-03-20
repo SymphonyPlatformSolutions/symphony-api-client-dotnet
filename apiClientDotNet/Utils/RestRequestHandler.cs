@@ -29,88 +29,93 @@ namespace apiClientDotNet.Utils
 
         public HttpWebResponse executeRequest(object data, String url, bool isAuth, string method, SymConfig symConfig, bool isAgent)
         {
+            HttpWebResponse response = null;
+            //If POST and not Auth set response to postApi
             if ( method == WebRequestMethods.Http.Post && isAuth != true)
             {
-                HttpWebResponse response = null;
                 response = postApi(symConfig, url, data, isAgent);
-                return response;
             }
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
-            if (symConfig.sessionProxyURL.Length > 0 && url.Contains("sessionauth"))
-            {
-                WebProxy sessionProxy = new WebProxy();
-                Uri sessionProxyUri = new Uri(symConfig.sessionProxyURL);
-                sessionProxy.Address=sessionProxyUri;
-                sessionProxy.Credentials = new NetworkCredential(symConfig.sessionProxyUsername, symConfig.sessionProxyPassword);
-                req.Proxy = sessionProxy;
-            } else if (symConfig.proxyURL.Length > 0 && (url.Contains("pod") || url.Contains("sessionauth") || url.EndsWith("/login/pubkey/authenticate")))
-            {
-                WebProxy proxy = new WebProxy();
-                Uri proxyUri = new Uri(symConfig.proxyURL);
-                proxy.Address = proxyUri;
-                proxy.Credentials = new NetworkCredential(symConfig.proxyUsername, symConfig.proxyPassword);
-                req.Proxy = proxy;
-            }
-            req.Credentials = CredentialCache.DefaultCredentials;
-            req.Method = method;
-            if (isAuth)
-            {
-                //If RSAAuth
-                if (url.EndsWith("pubkey/authenticate"))
+            //If not create HttpWebRequest
+            else {
+                HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
+            
+                //Set Proxy
+                if (symConfig.sessionProxyURL.Length > 0 && url.Contains("sessionauth"))
                 {
-                    req.Credentials = null;
-                    if (data != null)
-                    {
-                        var json = JsonConvert.SerializeObject(data);
-                        var jsonBytes = Encoding.ASCII.GetBytes(json);
-                        req.ContentLength = jsonBytes.Length;
+                    WebProxy sessionProxy = new WebProxy();
+                    Uri sessionProxyUri = new Uri(symConfig.sessionProxyURL);
+                    sessionProxy.Address=sessionProxyUri;
+                    sessionProxy.Credentials = new NetworkCredential(symConfig.sessionProxyUsername, symConfig.sessionProxyPassword);
+                    req.Proxy = sessionProxy;
+                } else if (symConfig.proxyURL.Length > 0 && (url.Contains("pod") || url.Contains("sessionauth") || url.EndsWith("/login/pubkey/authenticate")))
+                {
+                    WebProxy proxy = new WebProxy();
+                    Uri proxyUri = new Uri(symConfig.proxyURL);
+                    proxy.Address = proxyUri;
+                    proxy.Credentials = new NetworkCredential(symConfig.proxyUsername, symConfig.proxyPassword);
+                    req.Proxy = proxy;
+                }
 
-                        using (var stream = req.GetRequestStream())
+                req.Credentials = CredentialCache.DefaultCredentials;
+                req.Method = method;
+
+                //If Auth Call
+                if (isAuth)
+                {
+                    //If RSAAuth
+                    if (url.EndsWith("pubkey/authenticate"))
+                    {
+                        req.Credentials = null;
+                        if (data != null)
                         {
-                            stream.Write(jsonBytes, 0, jsonBytes.Length);
+                            var json = JsonConvert.SerializeObject(data);
+                            var jsonBytes = Encoding.ASCII.GetBytes(json);
+                            req.ContentLength = jsonBytes.Length;
+
+                            using (var stream = req.GetRequestStream())
+                            {
+                                stream.Write(jsonBytes, 0, jsonBytes.Length);
+                            }
                         }
                     }
-                }
-                else {
-                    Certificates = new X509CertificateCollection();
-                    byte[] cert = File.ReadAllBytes(symConfig.botCertPath + symConfig.botCertName + ".p12");
-                    Certificates.Add(new X509Certificate2(cert, symConfig.botCertPassword));
-                    req.ClientCertificates.AddRange(Certificates);
-                    if (symConfig.authTokens != null)
-                    {
-                        req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                    else {
+                        Certificates = new X509CertificateCollection();
+                        byte[] cert = File.ReadAllBytes(symConfig.botCertPath + symConfig.botCertName + ".p12");
+                        Certificates.Add(new X509Certificate2(cert, symConfig.botCertPassword));
+                        req.ClientCertificates.AddRange(Certificates);
+                        if (symConfig.authTokens != null)
+                        {
+                            req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                        }
                     }
-                }
-            } else if (isAgent)
-            {
-                req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
-                req.Headers.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
-            } else if (!isAgent)
-            {
-                req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
-            }   
+                } else { //If not Auth call add sessionToken and if Agent keyManagerToken
+                    req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                    if (isAgent) {
+                        req.Headers.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
+                    }
+                } 
 
-            //req.Proxy = Proxy;
-
-            HttpWebResponse resp = null;
-            try
-            {
-  
-                resp = (HttpWebResponse)req.GetResponse();
-                if (resp.StatusCode != HttpStatusCode.OK)
+                //Make request and get response
+                try
                 {
-                    ErrorHandler errorHandler = new ErrorHandler();
-                    errorHandler.handleError(resp);
-                }
+    
+                    response = (HttpWebResponse)req.GetResponse();
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        ErrorHandler errorHandler = new ErrorHandler();
+                        errorHandler.handleError(response);
+                    }
 
-                return resp;
+                    return response;
+                }
+                catch (WebException we)
+                {
+                    response = we.Response as HttpWebResponse;
+                    Console.Write(response);
+                }
+                response = null;
             }
-            catch (WebException we)
-            {
-                resp = we.Response as HttpWebResponse;
-                Console.Write(resp);
-            }
-            return null;
+            return response;
         }
 
         public string ReadResponse(HttpWebResponse resp)

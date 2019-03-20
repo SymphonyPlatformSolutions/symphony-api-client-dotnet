@@ -38,6 +38,7 @@ namespace apiClientDotNet.Authentication
             string url = "https://" + symConfig.sessionAuthHost + ":" + symConfig.sessionAuthPort + AuthEndpointConstants.RSASESSIONAUTH;
             HttpWebResponse resp = restRequestHandler.executeRequest(token, url, true, WebRequestMethods.Http.Post, symConfig, false);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             JObject o = JObject.Parse(body);
             authTokens.sessionToken = (string) o.SelectToken("token");
             sessionToken = authTokens.sessionToken;    
@@ -51,6 +52,7 @@ namespace apiClientDotNet.Authentication
             string url = "https://" + symConfig.keyAuthHost + ":" + symConfig.keyAuthPort + AuthEndpointConstants.RSAKMAUTH;
             HttpWebResponse resp = restRequestHandler.executeRequest(token, url, true, WebRequestMethods.Http.Post, symConfig, false);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             JObject o = JObject.Parse(body);
             authTokens.keyManagerToken = (string) o.SelectToken("token");
             kmToken = authTokens.keyManagerToken;

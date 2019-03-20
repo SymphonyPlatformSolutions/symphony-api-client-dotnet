@@ -68,7 +68,6 @@ namespace apiClientDotNet.Services
                 {
                     handleEvents(events);
                 }
-                getEventsFromDatafeed();
             }
 
         }
@@ -94,13 +93,13 @@ namespace apiClientDotNet.Services
         {
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             HttpWebResponse response = datafeedClient.getEventsFromDatafeed(symConfig, datafeed);
+            List<DatafeedEvent> events = null;
             if (response.StatusCode.Equals(HttpStatusCode.OK) || response.StatusCode.Equals(HttpStatusCode.Accepted))
             {
                 try
                 {
                     string body = restRequestHandler.ReadResponse(response);
-                    List<DatafeedEvent> events = JsonConvert.DeserializeObject<List<DatafeedEvent>>(body);
-                    return events;
+                    events = JsonConvert.DeserializeObject<List<DatafeedEvent>>(body);
                 }
                 catch (JsonSerializationException e)
                 {
@@ -108,21 +107,17 @@ namespace apiClientDotNet.Services
                     Console.WriteLine(e.Message);
                 }
             }
-            else if (response.StatusCode.Equals(HttpStatusCode.NoContent))
-            {
-                return null;
-            }
             else if (response.StatusCode.Equals(HttpStatusCode.Forbidden) || response.StatusCode.Equals(HttpStatusCode.Unauthorized))
             {
                 //Add reauth 
                 stopLoop = true;
-                return null;
             }
             else if (response.StatusCode.Equals(HttpStatusCode.BadRequest))
             {
                 stopLoop = true;
             }
-            return null;
+            response.Close();
+            return events;
         }
 
 

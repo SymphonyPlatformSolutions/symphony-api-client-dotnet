@@ -26,6 +26,7 @@ namespace apiClientDotNet
             string url = "https://" + symConfig.agentHost + ":" + symConfig.agentPort + "/agent/v4/datafeed/create";
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             JObject o = JObject.Parse(body);
             datafeed.datafeedID = (string)o["id"];
             return datafeed;
