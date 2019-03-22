@@ -5,6 +5,7 @@ using apiClientDotNet.Services;
 using apiClientDotNet.Models;
 using apiClientDotNet.Clients;
 using apiClientDotNet.Authentication;
+using System.Net;
 
 namespace apiClientDotNet
 {
@@ -24,6 +25,7 @@ namespace apiClientDotNet
 
         public static SymBotClient initBot(SymConfig config, ISymAuth symBotAuth)
         {
+            ServicePointManager.DefaultConnectionLimit = 10;
             if (botClient == null)
             {
                 botClient = new SymBotClient(config, symBotAuth);

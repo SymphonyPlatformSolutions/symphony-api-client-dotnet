@@ -40,6 +40,7 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(userIdList, url, false, WebRequestMethods.Http.Post, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
@@ -47,7 +48,7 @@ namespace apiClientDotNet
                 string body = restRequestHandler.ReadResponse(resp);
                 id = JsonConvert.DeserializeObject<StringId>(body);
             }
-            
+            resp.Close();
             return id.id;
         }
 
@@ -61,6 +62,7 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(room, url, false, WebRequestMethods.Http.Post, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
@@ -68,7 +70,7 @@ namespace apiClientDotNet
                 string body = restRequestHandler.ReadResponse(resp);
                 roomInfo = JsonConvert.DeserializeObject<RoomInfo>(body);
             }
-
+            resp.Close();
             return roomInfo;
         }
 
@@ -83,12 +85,14 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
             }
+            resp.Close();
         }
 
         public void removeMemberFromRoom(String streamId, long userId)
@@ -102,12 +106,14 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
             }
+            resp.Close();
         }
 
         public RoomInfo getRoomInfo(String streamId)
@@ -120,14 +126,15 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
-            
                 roomInfo = JsonConvert.DeserializeObject<RoomInfo>(body);
             }
+            resp.Close();
             return roomInfo;
         }
 
@@ -142,14 +149,15 @@ namespace apiClientDotNet
             //.post(Entity.entity(room, MediaType.APPLICATION_JSON));
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No user found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
-
                 roomInfo = JsonConvert.DeserializeObject<RoomInfo>(body);
             }
+            resp.Close();
             return roomInfo;
          }
 
@@ -164,16 +172,16 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No stream found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
-
                 streamInfo = JsonConvert.DeserializeObject<StreamInfo>(body);
             }
+            resp.Close();
             return streamInfo;
-
         }
 
         public List<RoomMember> getRoomMembers(String streamId)
@@ -186,15 +194,15 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
+                resp.Close();
                 throw new Exception("No stream found.");
             }
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
-
                 roomMembers = JsonConvert.DeserializeObject<List<RoomMember>>(body);
             }
-
+            resp.Close();
             return roomMembers;
 
           }
@@ -220,8 +228,8 @@ namespace apiClientDotNet
             if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
-               
             }
+            resp.Close();
         }
 
         public void promoteUserToOwner(String streamId, long userId) 
@@ -233,19 +241,18 @@ namespace apiClientDotNet
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.PROMOTEOWNER.Replace("{id}", streamId);
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
-           
-           
+            resp.Close();
          }
 
         public void demoteUserFromOwner(String streamId, long userId)
         {
-
             SymConfig symConfig = botClient.getConfig();
             NumericId id = new NumericId();
             id.id = userId;
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.DEMOTEOWNER.Replace("{id}", streamId);
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            resp.Close();
         }
 
         //TODO: CHECK WHY 500
@@ -253,7 +260,6 @@ namespace apiClientDotNet
         {
             RoomSearchResult result = null;
             SymConfig symConfig = botClient.getConfig();
-
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SEARCHROOMS;
 
@@ -287,7 +293,7 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(query, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
             result = JsonConvert.DeserializeObject<RoomSearchResult>(body);
-            
+            resp.Close();
             return result;
     }
 
@@ -312,10 +318,9 @@ namespace apiClientDotNet
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.LISTUSERSTREAMS;
             HttpWebResponse resp = restRequestHandler.executeRequest(input, url, false, WebRequestMethods.Http.Post, symConfig, true);
-
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<StreamInfoList>(body);
-            
         }
 
         public StreamListItem getUserWallStream() 

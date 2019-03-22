@@ -92,6 +92,7 @@ namespace apiClientDotNet.Clients
             }
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<InboundConnectionRequestList>(body);
 
         }
@@ -105,6 +106,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.ACCEPTCONNECTION;
             HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
            
         }
@@ -118,6 +120,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REJECTCONNECTION;
             HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
             
         }
@@ -131,6 +134,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SENDCONNECTIONREQUEST;
             HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
 
         }
@@ -142,6 +146,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETCONNECTIONSTATUS.Replace("{userId}", userId.ToString());
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
         }
 
@@ -151,8 +156,8 @@ namespace apiClientDotNet.Clients
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REMOVECONNECTION.Replace("{userId}", userId.ToString());
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
-            string body = restRequestHandler.ReadResponse(resp);
-        
+            //string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
          }
 
 

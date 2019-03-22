@@ -29,6 +29,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETUSERPRESENCE.Replace("{uid}", userId.ToString()) + "?local=" + local;
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<UserPresence>(body);
         }
 
@@ -41,6 +42,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SETPRESENCE;
             HttpWebResponse resp = restRequestHandler.executeRequest(category, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             return JsonConvert.DeserializeObject<UserPresence>(body);
 
         }
@@ -52,6 +54,7 @@ namespace apiClientDotNet.Clients
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REGISTERPRESENCEINTEREST;
             HttpWebResponse resp = restRequestHandler.executeRequest(userIds, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
         }
 
         private class Category

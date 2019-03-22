@@ -67,6 +67,7 @@ namespace apiClientDotNet
             }
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             List<InboundMessage> inboundMessages = JsonConvert.DeserializeObject<List<InboundMessage>>(body);
 
             return inboundMessages;
@@ -82,6 +83,7 @@ namespace apiClientDotNet
 
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             var base64EncodedBytes = System.Convert.FromBase64String(body);
 
             return base64EncodedBytes;
@@ -113,6 +115,7 @@ namespace apiClientDotNet
 
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             MessageStatus messageStatus = JsonConvert.DeserializeObject<MessageStatus>(body);
             return messageStatus;
 

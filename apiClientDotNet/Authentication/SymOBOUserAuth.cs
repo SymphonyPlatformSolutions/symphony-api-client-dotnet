@@ -17,8 +17,7 @@ namespace apiClientDotNet.Authentication
         private String username;
         private SymOBOAuth appAuth;
 
-        public SymOBOUserAuth( SymConfig config,
-                          long uid, SymOBOAuth appAuth)
+        public SymOBOUserAuth( SymConfig config, long uid, SymOBOAuth appAuth)
         {
             this.config = config;
             this.uid = uid;
@@ -26,8 +25,7 @@ namespace apiClientDotNet.Authentication
             authTokens = config.authTokens;
         }
 
-        public SymOBOUserAuth( SymConfig config,
-                               String username, SymOBOAuth appAuth)
+        public SymOBOUserAuth( SymConfig config, String username, SymOBOAuth appAuth)
         {
             this.config = config;
             this.username = username;
@@ -63,6 +61,7 @@ namespace apiClientDotNet.Authentication
                 string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.OBOUSERAUTH.Replace("{uid}", uid.ToString());
                 HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
                 string body = restRequestHandler.ReadResponse(resp);
+                resp.Close();
                 JObject o = JObject.Parse(body);
                 authTokens.sessionToken = (string)o["sessionToken"];
                 sessionToken = authTokens.sessionToken;
@@ -73,6 +72,7 @@ namespace apiClientDotNet.Authentication
                 string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.OBOUSERAUTHUSERNAME.Replace("{username}", username);
                 HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
                 string body = restRequestHandler.ReadResponse(resp);
+                resp.Close();
                 JObject o = JObject.Parse(body);
                 authTokens.sessionToken = (string)o["sessionToken"];
                 sessionToken = authTokens.sessionToken;
@@ -98,6 +98,7 @@ namespace apiClientDotNet.Authentication
             string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.LOGOUTPATH;
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
             string body = restRequestHandler.ReadResponse(resp);
+            resp.Close();
             JObject o = JObject.Parse(body);
             string message = (string)o["message"];
         }
