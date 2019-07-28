@@ -149,6 +149,11 @@ namespace apiClientDotNet.Utils
                         formData.Add(byteArrayContent, "attachment", fileName);
                     }
                 }
+                if(message.data != null)
+                {
+                    HttpContent jsonData = new StringContent(message.data);
+                    formData.Add(jsonData, "data", "data");
+                }
                         
                 client.DefaultRequestHeaders.Add("sessionToken", symConfig.authTokens.sessionToken);
                 if(symConfig.authTokens.keyManagerToken != null)
