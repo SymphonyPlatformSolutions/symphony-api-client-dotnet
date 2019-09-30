@@ -19,7 +19,7 @@ namespace apiClientDotNet.Models
         [JsonProperty("discoverable")]
         public Boolean discoverable { get; set; }
 
-        [JsonProperty("isPublic")]
+        [JsonProperty("public")]
         public Boolean isPublic { get; set; }
 
         [JsonProperty("readOnly")]
@@ -38,7 +38,7 @@ namespace apiClientDotNet.Models
         public Boolean multiLateralRoom { get; set; }
 
         [JsonProperty("keywords")]
-        public List<keyword> keywords { get; set; }
+        public List<Keyword> keywords { get; set; }
 
     }
 }
