@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace apiClientDotNet.Utils
 {
-    class RestRequestHandler
+    public class RestRequestHandler
     {
         public X509CertificateCollection Certificates
         {
