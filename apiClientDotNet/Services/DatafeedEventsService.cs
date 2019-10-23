@@ -60,7 +60,7 @@ namespace apiClientDotNet.Services
         {
             stopLoop = true;
         }
-/* 
+
         public void getEventsFromDatafeed()
         {
             List<DatafeedEvent> events = new List<DatafeedEvent>();
@@ -72,24 +72,6 @@ namespace apiClientDotNet.Services
                     handleEvents(events);
                 }
             }
-
-        }
-*/
-
-        public void getEventsFromDatafeed(SymConfig symConfig, Datafeed datafeed, DatafeedClient datafeedClient)
-        {
-            List<DatafeedEvent> events = new List<DatafeedEvent>();
-            while (!stopLoop)
-            {
-                events = RunAsync(symConfig, datafeed, datafeedClient).GetAwaiter().GetResult();
-                //if (events != null & events.Count > 0)
-                if (events != null)
-                {
-                    handleEvents(events);
-                }
-                getEventsFromDatafeed(symConfig, datafeed, datafeedClient);
-            }
-
         }
 
         static async Task<List<DatafeedEvent>> RunAsync(SymConfig symConfig, Datafeed datafeed, DatafeedClient datafeedClient)
