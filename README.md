@@ -108,45 +108,46 @@ If the traffic to your instance of Symphony is split between two proxys, one for
         using System.Collections.Generic;
         using apiClientDotNet.Utils;
 
-            public class MyIMListener : IMListener
+        public class MyIMListener : IMListener
+        {
+            private SymConfig symConfig;
+
+
+            public void init(SymConfig symConfig)
             {
-                private SymConfig symConfig;
+                this.symConfig = symConfig;
+            }
 
+            override public void onIMMessage(Message message)
+            {
+                string FirstCommand = "";
+                string SearchTerm = null;
+                string SearchStatus = null;
 
-                public void init(SymConfig symConfig)
+                if (message.message.Contains("/form"))
                 {
-                    this.symConfig = symConfig;
-                }
-
-                override public void onIMMessage(Message message)
-                {
-                    string FirstCommand = "";
-                    string SearchTerm = null;
-                    string SearchStatus = null;
-
-                    if (message.message.Contains("/form"))
-                    {
-                            string fresponse = "";
-                            fresponse += "<form id=\"form_id\">";
-                            fresponse += "<text-field name=\"Question_Subject\" required=\"true\" placeholder=\"Ask a Question\" />";
-                            fresponse += "<textarea name=\"comment\" placeholder=\"Add details (optional)\" required=\"false\"></textarea>";
-                            fresponse += "<button type=\"reset\">Reset</button>";
-                            fresponse += "<button name=\"submit_button\" type=\"action\">Submit</button>";
-                            fresponse += "</form>";
-                            sendMessage(message.stream.streamId, fresponse);
-                    }
-                }
-                private void sendMessage(String streamId, String messageText)
-                {
-                    Console.WriteLine("streamId:" + streamId);
-                    OutboundMessage message = new OutboundMessage();
-                    message.message = "<messageML>"+messageText+"</messageML>";                
-                    RestRequestHandler restRequestHandler = new RestRequestHandler();
-                    string url = "https://" + this.symConfig.agentHost + "/agent/v4/stream/" + streamId + "/message/create";
-                    HttpWebResponse resp = restRequestHandler.executeRequest(message, url, false, WebRequestMethods.Http.Post, symConfig, true);
-
+                        string fresponse = "";
+                        fresponse += "<form id=\"form_id\">";
+                        fresponse += "<text-field name=\"Question_Subject\" required=\"true\" placeholder=\"Ask a Question\" />";
+                        fresponse += "<textarea name=\"comment\" placeholder=\"Add details (optional)\" required=\"false\"></textarea>";
+                        fresponse += "<button type=\"reset\">Reset</button>";
+                        fresponse += "<button name=\"submit_button\" type=\"action\">Submit</button>";
+                        fresponse += "</form>";
+                        sendMessage(message.stream.streamId, fresponse);
                 }
             }
+
+            private void sendMessage(String streamId, String messageText)
+            {
+                Console.WriteLine("streamId:" + streamId);
+                OutboundMessage message = new OutboundMessage();
+                message.message = "<messageML>"+messageText+"</messageML>";                
+                RestRequestHandler restRequestHandler = new RestRequestHandler();
+                string url = "https://" + this.symConfig.agentHost + "/agent/v4/stream/" + streamId + "/message/create";
+                HttpWebResponse resp = restRequestHandler.executeRequest(message, url, false, WebRequestMethods.Http.Post, symConfig, true);
+
+            }
+        }
 
         public class MyElementsActionListener : ElementsActionListener
         {
@@ -174,47 +175,37 @@ If the traffic to your instance of Symphony is split between two proxys, one for
 
         namespace symphony_dotnet_bot_test
         {
-
-
             class Program
             {
                 private static readonly String CURRENT_DIR = Directory.GetCurrentDirectory();
                 private static readonly String CONFIGFILE = CURRENT_DIR + @"/config.json";
-                    static void Main(string[] args)
 
-
+                static void Main(string[] args)
                 {
                     try {
                         SymConfigLoader symConfigLoader = new SymConfigLoader();
                         SymConfig symConfig = symConfigLoader.loadFromFile(CONFIGFILE);
 
-                        Console.WriteLine(CONFIGFILE);
                         SymBotRSAAuth symAuth = new SymBotRSAAuth(symConfig);
-                        Console.WriteLine(symConfig.ToString());
-                        Console.WriteLine(symAuth.ToString());
                         symAuth.authenticate();
 
                         SymBotClient botClient = SymBotClient.initBot(symConfig,symAuth);
-                        DatafeedEventsService dataFeedService = botClient.getDatafeedEventsService();
-                        DatafeedClient feedClient = dataFeedService.init(symConfig);
-                        Console.WriteLine(dataFeedService.ToString());
 
                         MyIMListener myIMListener = new MyIMListener();
                         myIMListener.init(symConfig);
 
-                                MyElementsActionListener myElementsActionListener = new MyElementsActionListener();
-                                myElementsActionListener.init(symConfig);
+                        MyElementsActionListener myElementsActionListener = new MyElementsActionListener();
+                        myElementsActionListener.init(symConfig);
 
                         // start listening for messages
+                        DatafeedEventsService dataFeedService = botClient.getDatafeedEventsService();
                         dataFeedService.addIMListener(myIMListener);
-                                dataFeedService.addElementsActionListener(myElementsActionListener);
-                        Console.WriteLine("feedService.datafeed.datafeedID:" + dataFeedService.datafeed.datafeedID);
-                        dataFeedService.getEventsFromDatafeed(symConfig,dataFeedService.datafeed,feedClient);
+                        dataFeedService.addElementsActionListener(myElementsActionListener);
+                        dataFeedService.getEventsFromDatafeed();
                     }
                     catch (Exception ex) {
                         Console.WriteLine(ex);
                     }
-
                 }
             }
         }
