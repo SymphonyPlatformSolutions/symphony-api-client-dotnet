@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
 using apiClientDotNet.Models.Events;
 using apiClientDotNet.Listeners;
 using apiClientDotNet.Utils;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using apiClientDotNet.Clients;
 
 namespace apiClientDotNet.Services
 {
@@ -20,7 +17,7 @@ namespace apiClientDotNet.Services
         private List<RoomListener> roomListeners;
         private List<IMListener> IMListeners;
         private List<ConnectionListener> connectionListeners;
-	private List<ElementsActionListener> elementsActionListeners;
+	    private List<ElementsActionListener> elementsActionListeners;
         private DatafeedClient datafeedClient;
         private SymBotClient botClient;
         public String datafeedId;
@@ -32,7 +29,7 @@ namespace apiClientDotNet.Services
             roomListeners = new List<RoomListener>();
             IMListeners = new List<IMListener>();
             connectionListeners = new List<ConnectionListener>();
-	    elementsActionListeners = new List<ElementsActionListener>();
+	        elementsActionListeners = new List<ElementsActionListener>();
             datafeedClient = new DatafeedClient();
             datafeed = datafeedClient.createDatafeed(client.getConfig());
             datafeedId = datafeed.datafeedID;
@@ -44,7 +41,7 @@ namespace apiClientDotNet.Services
             roomListeners = new List<RoomListener>();
             IMListeners = new List<IMListener>();
             connectionListeners = new List<ConnectionListener>();
-	    elementsActionListeners = new List<ElementsActionListener>();
+	        elementsActionListeners = new List<ElementsActionListener>();
             datafeedClient = new DatafeedClient();
 
             return datafeedClient;
@@ -238,27 +235,21 @@ namespace apiClientDotNet.Services
                             }
                             break;
 
-			case "SYMPHONYELEMENTSACTION":
+			            case "SYMPHONYELEMENTSACTION":
                             var StreamID = eventv4.payload.symphonyElementsAction.formStream.streamId.ToString();
-                                StreamID = StreamID.Replace("=","");
-                                StreamID = StreamID.Replace("/","_");
-                                StreamID = StreamID.Replace("+","-");
+                            StreamID = StreamID.Replace("=","");
+                            StreamID = StreamID.Replace("/","_");
+                            StreamID = StreamID.Replace("+","-");
 
                             SymphonyElementsAction symphonyElementsAction = eventv4.payload.symphonyElementsAction;
-			    User user = eventv4.initiator.user;
+			                User user = eventv4.initiator.user;
                             foreach (ElementsActionListener listener in elementsActionListeners)
                             {
-                                
-                                //listener.onFormMessage(eventv4.initiator.user, eventv4.payload.symphonyElementsAction);
                                 listener.onFormMessage(user, StreamID, symphonyElementsAction);
                             }
-
-
                             break;  
-
                         default:
                             break;
-
                     }
                 }  
             }
@@ -294,14 +285,14 @@ namespace apiClientDotNet.Services
             connectionListeners.Remove(listener);
         }
 
-	public void addElementsActionListener(ElementsActionListener listener)
-	{
-		elementsActionListeners.Add(listener);
-	}
+        public void addElementsActionListener(ElementsActionListener listener)
+        {
+            elementsActionListeners.Add(listener);
+        }
 
-	public void removeElementsActionListener(ElementsActionListener listener)
-	{
-		elementsActionListeners.Remove(listener);
-	}
+        public void removeElementsActionListener(ElementsActionListener listener)
+        {
+            elementsActionListeners.Remove(listener);
+        }
     }
 }
