@@ -21,9 +21,6 @@ Elements support is added in 1.0.18, however this version of the SDK requires so
             "podPort": 443,
             "agentHost": "<podname>.symphony.com",
             "agentPort": 443,
-            "sessionProxyURL": "",
-            "sessionProxyUsername":"",
-            "sessionProxyPassword": "",
             "botCertPath": "",
             "botCertName": "",
             "botCertPassword": "",
@@ -34,9 +31,26 @@ Elements support is added in 1.0.18, however this version of the SDK requires so
             "appCertPath": "",
             "appCertName": "",
             "appCertPassword": "",
+			// Optional, global proxy
             "proxyURL": "",
             "proxyUsername": "",
             "proxyPassword": "",
+			// Optional, session host proxy
+            "sessionProxyURL": "",
+            "sessionProxyUsername":"",
+            "sessionProxyPassword": "",
+			// Optional, key manager host proxy
+            "keyProxyURL": "",
+            "keyProxyUsername":"",
+            "keyProxyPassword": "",
+			// Optional, pod host proxy
+            "podProxyURL": "",
+            "podProxyUsername":"",
+            "podProxyPassword": "",
+			// Optional, agent host proxy
+            "agentProxyURL": "",
+            "agentProxyUsername":"",
+            "agentProxyPassword": "",
             "authTokenRefreshPeriod": "30",
             "truststorePath": ""
         }
@@ -45,28 +59,42 @@ Elements support is added in 1.0.18, however this version of the SDK requires so
 Create a config.json file in your project which includes the following properties
 
         {
-          "sessionAuthHost": "COMPANYNAME-api.symphony.com",
-          "sessionAuthPort": 8444,
-          "keyAuthHost": "COMPANYNAME-api.symphony.com",
-          "keyAuthPort": 8444,
-          "podHost": "COMPANYNAME.symphony.com",
-          "podPort": 443,
-          "agentHost": "COMAPNYNAME.symphony.com",
-          "agentPort": 443,
-          "botCertPath": "PATH",
-          "botCertName": "BOT-CERT-NAME",
-          "botCertPassword": "BOT-PASSWORD",
-          "botEmailAddress": "BOT-EMAIL-ADDRESS",
-          "appCertPath": "",
-          "appCertName": "",
-          "appCertPassword": "",
-          "proxyURL": "",
-          "proxyUsername": "",
-          "proxyPassword": "",
-          "sessionProxyURL": "",
-          "sessionProxyUsername": "",
-          "sessionProxyPassword": "",
-          "authTokenRefreshPeriod": "30"
+			"sessionAuthHost": "COMPANYNAME-api.symphony.com",
+			"sessionAuthPort": 8444,
+			"keyAuthHost": "COMPANYNAME-api.symphony.com",
+			"keyAuthPort": 8444,
+			"podHost": "COMPANYNAME.symphony.com",
+			"podPort": 443,
+			"agentHost": "COMAPNYNAME.symphony.com",
+			"agentPort": 443,
+			"botCertPath": "PATH",
+			"botCertName": "BOT-CERT-NAME",
+			"botCertPassword": "BOT-PASSWORD",
+			"botEmailAddress": "BOT-EMAIL-ADDRESS",
+			"appCertPath": "",
+			"appCertName": "",
+			"appCertPassword": "",
+			// Optional, global proxy
+			"proxyURL": "",
+			"proxyUsername": "",
+			"proxyPassword": "",
+			// Optional, session host proxy
+			"sessionProxyURL": "",
+			"sessionProxyUsername":"",
+			"sessionProxyPassword": "",
+			// Optional, key manager host proxy
+			"keyProxyURL": "",
+			"keyProxyUsername":"",
+			"keyProxyPassword": "",
+			// Optional, pod host proxy
+			"podProxyURL": "",
+			"podProxyUsername":"",
+			"podProxyPassword": "",
+			// Optional, agent host proxy
+			"agentProxyURL": "",
+			"agentProxyUsername":"",
+			"agentProxyPassword": "",
+			"authTokenRefreshPeriod": "30"
         }
         
 ## Proxy Settings
