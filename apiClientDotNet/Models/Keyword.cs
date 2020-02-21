@@ -5,12 +5,12 @@ using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
-    public class keyword
+    public class Keyword
     {
         [JsonProperty("key")]
         public string key { get; set; }
 
         [JsonProperty("value")]
-        public long value { get; set; }
+        public string value { get; set; }
     }
 }

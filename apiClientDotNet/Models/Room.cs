@@ -38,7 +38,7 @@ namespace apiClientDotNet.Models
         public Boolean multiLateralRoom { get; set; }
 
         [JsonProperty("keywords")]
-        public List<keyword> keywords { get; set; }
+        public List<Keyword> keywords { get; set; }
 
     }
 }
