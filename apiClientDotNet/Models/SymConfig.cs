@@ -63,7 +63,7 @@ namespace apiClientDotNet.Models
 
         public AuthTokens authTokens { get; set; }
 
-        #region Global PRoxy
+        #region Global Proxy
 
         [JsonProperty("proxyURL")]
         public string proxyURL { get; set; }
@@ -91,14 +91,14 @@ namespace apiClientDotNet.Models
 
         #region Key Manager proxy
 
-        [JsonProperty("keyProxyURL")]
-        public string keyProxyURL { get; set; }
+        [JsonProperty("keyManagerProxyURL")]
+        public string keyManagerProxyURL { get; set; }
 
-        [JsonProperty("keyProxyUsername")]
-        public string keyProxyUsername { get; set; }
+        [JsonProperty("keyManagerProxyUsername")]
+        public string keyManagerProxyUsername { get; set; }
 
-        [JsonProperty("keyProxyPassword")]
-        public string keyProxyPassword { get; set; }
+        [JsonProperty("keyManagerProxyPassword")]
+        public string keyManagerProxyPassword { get; set; }
 
         #endregion
 

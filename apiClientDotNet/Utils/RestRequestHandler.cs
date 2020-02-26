@@ -109,26 +109,26 @@ namespace apiClientDotNet.Utils
             string proxyPassword = null;
 
             // Find proxy
-            var url = request.RequestUri.AbsolutePath;
-            if (url.Contains(symConfig.sessionAuthHost)) // Session
+            var path = request.RequestUri.AbsolutePath;
+            if (path.StartsWith("/login/") || path.StartsWith("/sessionauth/")) // Session
             {
                 proxyUrl = symConfig.sessionProxyURL;
                 proxyUserName = symConfig.sessionProxyUsername;
                 proxyPassword = symConfig.sessionProxyPassword;
             }
-            else if (url.Contains(symConfig.keyAuthHost)) // Key Manager
+            else if (path.StartsWith("/relay/")) // Key Manager
             {
-                proxyUrl = symConfig.keyProxyURL;
-                proxyUserName = symConfig.keyProxyUsername;
-                proxyPassword = symConfig.keyProxyPassword;
+                proxyUrl = symConfig.keyManagerProxyURL;
+                proxyUserName = symConfig.keyManagerProxyUsername;
+                proxyPassword = symConfig.keyManagerProxyPassword;
             }
-            else if (url.Contains(symConfig.podHost)) // Pod
+            else if (path.StartsWith("/pod/")) // Pod
             {
                 proxyUrl = symConfig.podProxyURL;
                 proxyUserName = symConfig.podProxyUsername;
                 proxyPassword = symConfig.podProxyPassword;
             }
-            else if (url.Contains(symConfig.agentHost)) // Agent
+            else if (path.Contains("/agent/")) // Agent
             {
                 proxyUrl = symConfig.agentProxyURL;
                 proxyUserName = symConfig.agentProxyUsername;
@@ -212,7 +212,7 @@ namespace apiClientDotNet.Utils
             var targetUri = new System.Uri(url);
             var request = (HttpWebRequest) WebRequest.Create(targetUri);
             SetProxy(request, symConfig);
-            request.Method = "Post";
+            request.Method = "POST";
             request.ContentType = "application/json";
             request.Accept = "application/json";
 
