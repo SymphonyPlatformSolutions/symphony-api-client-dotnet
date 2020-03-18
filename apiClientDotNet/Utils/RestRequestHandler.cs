@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using apiClientDotNet.Models;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
-using System.Collections.Specialized;
-using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
