@@ -82,7 +82,7 @@ namespace apiClientDotNet
             id.id = userId;
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.ADDMEMBER.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(id, url, false, WebRequestMethods.Http.Post, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
                 resp.Close();
@@ -103,7 +103,7 @@ namespace apiClientDotNet
             id.id = userId;
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REMOVEMEMBER.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(id, url, false, WebRequestMethods.Http.Post, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
                 resp.Close();
@@ -240,7 +240,7 @@ namespace apiClientDotNet
             id.id = userId;
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.PROMOTEOWNER.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(id, url, false, WebRequestMethods.Http.Post, symConfig, true);
             resp.Close();
          }
 
@@ -251,7 +251,7 @@ namespace apiClientDotNet
             id.id = userId;
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.DEMOTEOWNER.Replace("{id}", streamId);
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(id, url, false, WebRequestMethods.Http.Post, symConfig, true);
             resp.Close();
         }
 

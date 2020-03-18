@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
-    public class keyword
+    public class Keyword
     {
         [JsonProperty("key")]
         public string key { get; set; }

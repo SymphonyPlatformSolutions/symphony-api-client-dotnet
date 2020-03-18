@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using apiClientDotNet.Models;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using System.Collections.Specialized;
+using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
@@ -164,6 +167,7 @@ namespace apiClientDotNet.Utils
             return responseString;
         }
 
+
         public HttpResponseMessage executePostFormRequest(object data, String url, SymConfig symConfig)
         {
             var message = (OutboundMessage) data;
@@ -207,6 +211,8 @@ namespace apiClientDotNet.Utils
             }
         }
 
+      
+
         private HttpWebResponse postApi(SymConfig symConfig, string url, object data, bool isAgent)
         {
             var targetUri = new System.Uri(url);
@@ -238,6 +244,7 @@ namespace apiClientDotNet.Utils
                 {
                     stream.Write(json, 0, json.Length);
                 }
+
             }
 
             var response = (HttpWebResponse) request.GetResponse();
