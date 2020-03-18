@@ -44,10 +44,10 @@ namespace apiClientDotNet.Clients
             return info;
         }
 
-        public UserInfo getUserFromEmail(String email, Boolean local) {
+        public List<UserInfo> getUserFromEmail(String email, Boolean local) {
 
             SymConfig symConfig = botClient.getConfig();
-            UserInfo info = null;
+            UserInfoList info = null;
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETUSERSV3 + "?email=" + email + "&local=" + local;
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
@@ -59,10 +59,10 @@ namespace apiClientDotNet.Clients
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
-                info = JsonConvert.DeserializeObject<UserInfo>(body);
+                info = JsonConvert.DeserializeObject<UserInfoList>(body);
             }
             resp.Close();
-            return info;
+            return info.users;
         }
 
         public UserInfo getUserFromId(long id, Boolean local) {
@@ -206,7 +206,7 @@ namespace apiClientDotNet.Clients
             body.Add("query", query);
             body.Add("filters", filter);
 
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(body, url, false, WebRequestMethods.Http.Post, symConfig, true);
             if (resp.StatusCode == HttpStatusCode.NoContent)
             {
                 resp.Close();

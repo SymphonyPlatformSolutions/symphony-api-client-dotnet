@@ -42,7 +42,7 @@ namespace apiClientDotNet.Models
         public bool copyPrmembersCanInviteotected { get; set; }
 
         [JsonProperty("keywords")]
-        public List<keyword> keywords { get; set; }
+        public List<Keyword> keywords { get; set; }
 
         [JsonProperty("canViewHistory")]
         public bool canViewHistory { get; set; }
