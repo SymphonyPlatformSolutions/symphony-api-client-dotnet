@@ -11,6 +11,6 @@ namespace apiClientDotNet.Models
         public string key { get; set; }
 
         [JsonProperty("value")]
-        public long value { get; set; }
+        public string value { get; set; }
     }
 }

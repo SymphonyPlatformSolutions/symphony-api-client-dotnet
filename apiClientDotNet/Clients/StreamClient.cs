@@ -262,8 +262,6 @@ namespace apiClientDotNet
             SymConfig symConfig = botClient.getConfig();
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SEARCHROOMS;
-
-
             if (skip > 0)
             {
                 if (url.Contains("?"))
@@ -290,7 +288,7 @@ namespace apiClientDotNet
             {
                 query.labels = new List<String>();
             }
-            HttpWebResponse resp = restRequestHandler.executeRequest(query, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(query, url, false, WebRequestMethods.Http.Post, symConfig, false);
             string body = restRequestHandler.ReadResponse(resp);
             result = JsonConvert.DeserializeObject<RoomSearchResult>(body);
             resp.Close();
