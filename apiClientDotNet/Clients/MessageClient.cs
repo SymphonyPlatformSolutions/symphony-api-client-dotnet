@@ -52,7 +52,7 @@ namespace apiClientDotNet
 
         public List<InboundMessage> getMessagesFromStream(String streamId, int since, int skip, int limit)
         {
-            List<InboundMessage> result = null;
+            List<InboundMessage> inboundMessages = null;
             SymConfig symConfig = botClient.getConfig();
 
             RestRequestHandler restRequestHandler = new RestRequestHandler();
@@ -71,7 +71,7 @@ namespace apiClientDotNet
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
             resp.Close();
-            List<InboundMessage> inboundMessages = JsonConvert.DeserializeObject<List<InboundMessage>>(body);
+            inboundMessages = JsonConvert.DeserializeObject<List<InboundMessage>>(body);
 
             return inboundMessages;
         }
