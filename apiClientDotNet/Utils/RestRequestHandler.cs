@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using apiClientDotNet.Models;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
-using System.Collections.Specialized;
-using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
@@ -15,15 +12,11 @@ namespace apiClientDotNet.Utils
 {
     public class RestRequestHandler
     {
-        public X509CertificateCollection Certificates
-        {
-            get;
-            protected set;
-        }
+        public X509CertificateCollection Certificates { get; protected set; }
 
         public void AddCert(string fileName, string password)
         {
-            byte[] cert = File.ReadAllBytes(fileName);
+            var cert = File.ReadAllBytes(fileName);
             Certificates.Add(new X509Certificate2(cert, password));
         }
 
@@ -31,33 +24,18 @@ namespace apiClientDotNet.Utils
         {
             HttpWebResponse response = null;
             //If POST and not Auth set response to postApi
-            if ( method == WebRequestMethods.Http.Post && isAuth != true)
+            if (method == WebRequestMethods.Http.Post && isAuth != true)
             {
                 response = postApi(symConfig, url, data, isAgent);
             }
             //If not create HttpWebRequest
-            else {
-                HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
-            
-                //Set Proxy
-                if (symConfig.sessionProxyURL.Length > 0 && url.Contains("sessionauth"))
-                {
-                    WebProxy sessionProxy = new WebProxy();
-                    Uri sessionProxyUri = new Uri(symConfig.sessionProxyURL);
-                    sessionProxy.Address=sessionProxyUri;
-                    sessionProxy.Credentials = new NetworkCredential(symConfig.sessionProxyUsername, symConfig.sessionProxyPassword);
-                    req.Proxy = sessionProxy;
-                } else if (symConfig.proxyURL.Length > 0 && (url.Contains("pod") || url.Contains("sessionauth") || url.EndsWith("/login/pubkey/authenticate")))
-                {
-                    WebProxy proxy = new WebProxy();
-                    Uri proxyUri = new Uri(symConfig.proxyURL);
-                    proxy.Address = proxyUri;
-                    proxy.Credentials = new NetworkCredential(symConfig.proxyUsername, symConfig.proxyPassword);
-                    req.Proxy = proxy;
-                }
+            else
+            {
+                var request = (HttpWebRequest) WebRequest.Create(url);
+                SetProxy(request, symConfig);
 
-                req.Credentials = CredentialCache.DefaultCredentials;
-                req.Method = method;
+                request.Credentials = CredentialCache.DefaultCredentials;
+                request.Method = method;
 
                 //If Auth Call
                 if (isAuth)
@@ -65,44 +43,48 @@ namespace apiClientDotNet.Utils
                     //If RSAAuth
                     if (url.EndsWith("pubkey/authenticate"))
                     {
-                        req.Credentials = null;
+                        request.Credentials = null;
                         if (data != null)
                         {
                             var json = JsonConvert.SerializeObject(data);
                             var jsonBytes = Encoding.ASCII.GetBytes(json);
-                            req.ContentLength = jsonBytes.Length;
+                            request.ContentLength = jsonBytes.Length;
 
-                            using (var stream = req.GetRequestStream())
+                            using (var stream = request.GetRequestStream())
                             {
                                 stream.Write(jsonBytes, 0, jsonBytes.Length);
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         Certificates = new X509CertificateCollection();
-                        byte[] cert = File.ReadAllBytes(symConfig.botCertPath + symConfig.botCertName + ".p12");
+                        var cert = File.ReadAllBytes(symConfig.botCertPath + symConfig.botCertName + ".p12");
                         Certificates.Add(new X509Certificate2(cert, symConfig.botCertPassword));
-                        req.ClientCertificates.AddRange(Certificates);
+                        request.ClientCertificates.AddRange(Certificates);
                         if (symConfig.authTokens != null)
                         {
-                            req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                            request.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
                         }
                     }
-                } else { //If not Auth call add sessionToken and if Agent keyManagerToken
-                    req.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
-                    if (isAgent) {
-                        req.Headers.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
+                }
+                else
+                {
+                    //If not Auth call add sessionToken and if Agent keyManagerToken
+                    request.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
+                    if (isAgent)
+                    {
+                        request.Headers.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
                     }
-                } 
+                }
 
                 //Make request and get response
                 try
                 {
-    
-                    response = (HttpWebResponse)req.GetResponse();
+                    response = (HttpWebResponse) request.GetResponse();
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        ErrorHandler errorHandler = new ErrorHandler();
+                        var errorHandler = new ErrorHandler();
                         errorHandler.handleError(response);
                     }
 
@@ -113,53 +95,106 @@ namespace apiClientDotNet.Utils
                     response = we.Response as HttpWebResponse;
                     Console.Write(response);
                 }
+
                 response = null;
             }
+
             return response;
+        }
+
+        private void SetProxy(HttpWebRequest request, SymConfig symConfig)
+        {
+            string proxyUrl = null;
+            string proxyUserName = null;
+            string proxyPassword = null;
+
+            // Find proxy
+            var path = request.RequestUri.AbsolutePath;
+            if (path.StartsWith("/login/") || path.StartsWith("/sessionauth/")) // Session
+            {
+                proxyUrl = symConfig.sessionProxyURL;
+                proxyUserName = symConfig.sessionProxyUsername;
+                proxyPassword = symConfig.sessionProxyPassword;
+            }
+            else if (path.StartsWith("/relay/")) // Key Manager
+            {
+                proxyUrl = symConfig.keyManagerProxyURL;
+                proxyUserName = symConfig.keyManagerProxyUsername;
+                proxyPassword = symConfig.keyManagerProxyPassword;
+            }
+            else if (path.StartsWith("/pod/")) // Pod
+            {
+                proxyUrl = symConfig.podProxyURL;
+                proxyUserName = symConfig.podProxyUsername;
+                proxyPassword = symConfig.podProxyPassword;
+            }
+            else if (path.Contains("/agent/")) // Agent
+            {
+                proxyUrl = symConfig.agentProxyURL;
+                proxyUserName = symConfig.agentProxyUsername;
+                proxyPassword = symConfig.agentProxyPassword;
+            }
+
+            // Defaulting on global proxy
+            if (string.IsNullOrEmpty(proxyUrl))
+            {
+                proxyUrl = symConfig.proxyURL;
+                proxyUserName = symConfig.proxyUsername;
+                proxyPassword = symConfig.proxyPassword;
+            }
+
+            // Create and set proxy if any
+            if (!string.IsNullOrEmpty(proxyUrl))
+            {
+                var sessionProxy = new WebProxy();
+                var sessionProxyUri = new Uri(proxyUrl);
+                sessionProxy.Address = sessionProxyUri;
+                if (!string.IsNullOrEmpty(proxyUserName) && !string.IsNullOrEmpty(proxyPassword))
+                    sessionProxy.Credentials = new NetworkCredential(proxyUserName, proxyPassword);
+                else
+                    sessionProxy.Credentials = CredentialCache.DefaultNetworkCredentials; // Credential from current account
+                request.Proxy = sessionProxy;
+            }
         }
 
         public string ReadResponse(HttpWebResponse resp)
         {
-            StreamReader reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
-            String responseString = reader.ReadToEnd();
+            var reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
+            var responseString = reader.ReadToEnd();
             return responseString;
         }
 
 
         public HttpResponseMessage executePostFormRequest(object data, String url, SymConfig symConfig)
         {
-            OutboundMessage message = (OutboundMessage)data;
+            var message = (OutboundMessage) data;
             HttpContent stringContent = new StringContent(message.message);
 
             using (var client = new HttpClient())
             using (var formData = new MultipartFormDataContent())
             {
                 formData.Add(stringContent, "message", "message");
-                if(message.attachments != null)
+                if (message.attachments != null)
                 {
-                    foreach( FileStream attachment in message.attachments)
+                    foreach (var attachment in message.attachments)
                     {
                         byte[] buffer = null;
                         buffer = new byte[attachment.Length];
-                        attachment.Read(buffer, 0, (int)attachment.Length);
+                        attachment.Read(buffer, 0, (int) attachment.Length);
                         HttpContent byteArrayContent = new ByteArrayContent(buffer);
 
                         byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
-                        String fileName = Path.GetFileName(attachment.Name);
+                        var fileName = Path.GetFileName(attachment.Name);
                         formData.Add(byteArrayContent, "attachment", fileName);
                     }
                 }
-                if(message.data != null)
-                {
-                    HttpContent jsonData = new StringContent(message.data);
-                    formData.Add(jsonData, "data", "data");
-                }
-                        
+
                 client.DefaultRequestHeaders.Add("sessionToken", symConfig.authTokens.sessionToken);
-                if(symConfig.authTokens.keyManagerToken != null)
+                if (symConfig.authTokens.keyManagerToken != null)
                 {
                     client.DefaultRequestHeaders.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
                 }
+
                 var response = client.PostAsync(url, formData).Result;
 
                 // ensure the request was a success
@@ -168,6 +203,7 @@ namespace apiClientDotNet.Utils
                     Debug.WriteLine(response.ToString());
                     return null;
                 }
+
                 return response;
             }
         }
@@ -176,9 +212,10 @@ namespace apiClientDotNet.Utils
 
         private HttpWebResponse postApi(SymConfig symConfig, string url, object data, bool isAgent)
         {
-            System.Uri targetUri = new System.Uri(url);
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(targetUri);
-            request.Method = "Post";
+            var targetUri = new System.Uri(url);
+            var request = (HttpWebRequest) WebRequest.Create(targetUri);
+            SetProxy(request, symConfig);
+            request.Method = "POST";
             request.ContentType = "application/json";
             request.Accept = "application/json";
 
@@ -189,10 +226,11 @@ namespace apiClientDotNet.Utils
                 request.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
                 request.Headers.Add("keyManagerToken", symConfig.authTokens.keyManagerToken);
             }
-            else if (!isAgent)
+            else 
             {
                 request.Headers.Add("sessionToken", symConfig.authTokens.sessionToken);
             }
+
             request.Method = "POST";
             request.ContentType = "application/json";
             if (data != null)
@@ -206,7 +244,7 @@ namespace apiClientDotNet.Utils
 
             }
 
-            var response = (HttpWebResponse)request.GetResponse();
+            var response = (HttpWebResponse) request.GetResponse();
 
             return response;
         }

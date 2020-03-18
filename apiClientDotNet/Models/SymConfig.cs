@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
 {
@@ -52,24 +49,6 @@ namespace apiClientDotNet.Models
         [JsonProperty("appCertPassword")]
         public string appCertPassword { get; set; }
 
-        [JsonProperty("proxyURL")]
-        public string proxyURL { get; set; }
-
-        [JsonProperty("proxyUsername")]
-        public string proxyUsername { get; set; }
-
-        [JsonProperty("proxyPassword")]
-        public string proxyPassword { get; set; }
-
-        [JsonProperty("sessionProxyURL")]
-        public string sessionProxyURL { get; set; }
-
-        [JsonProperty("sessionProxyUsername")]
-        public string sessionProxyUsername { get; set; }
-
-        [JsonProperty("sessionProxyPassword")]
-        public string sessionProxyPassword { get; set; }
-
         [JsonProperty("authTokenRefreshPeriod")]
         public string authTokenRefreshPeriod { get; set; }
 
@@ -83,6 +62,70 @@ namespace apiClientDotNet.Models
         public string botUsername { get; set; }
 
         public AuthTokens authTokens { get; set; }
- 
+
+        #region Global Proxy
+
+        [JsonProperty("proxyURL")]
+        public string proxyURL { get; set; }
+
+        [JsonProperty("proxyUsername")]
+        public string proxyUsername { get; set; }
+
+        [JsonProperty("proxyPassword")]
+        public string proxyPassword { get; set; }
+
+        #endregion
+
+        #region Session proxy
+
+        [JsonProperty("sessionProxyURL")]
+        public string sessionProxyURL { get; set; }
+
+        [JsonProperty("sessionProxyUsername")]
+        public string sessionProxyUsername { get; set; }
+
+        [JsonProperty("sessionProxyPassword")]
+        public string sessionProxyPassword { get; set; }
+
+        #endregion
+
+        #region Key Manager proxy
+
+        [JsonProperty("keyManagerProxyURL")]
+        public string keyManagerProxyURL { get; set; }
+
+        [JsonProperty("keyManagerProxyUsername")]
+        public string keyManagerProxyUsername { get; set; }
+
+        [JsonProperty("keyManagerProxyPassword")]
+        public string keyManagerProxyPassword { get; set; }
+
+        #endregion
+
+        #region Pod proxy
+
+        [JsonProperty("podProxyURL")]
+        public string podProxyURL { get; set; }
+
+        [JsonProperty("podProxyUsername")]
+        public string podProxyUsername { get; set; }
+
+        [JsonProperty("podProxyPassword")]
+        public string podProxyPassword { get; set; }
+
+        #endregion
+
+        #region Agent proxy
+
+        [JsonProperty("agentProxyURL")]
+        public string agentProxyURL { get; set; }
+
+        [JsonProperty("agentProxyUsername")]
+        public string agentProxyUsername { get; set; }
+
+        [JsonProperty("agentProxyPassword")]
+        public string agentProxyPassword { get; set; }
+
+        #endregion
     }
 }
