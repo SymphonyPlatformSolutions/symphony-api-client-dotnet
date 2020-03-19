@@ -11,11 +11,20 @@ namespace apiClientDotNetTest
     {
 
         [TestMethod]
-        public void LoadConfigTest()
+        public void ForGivenConfigFile_CorrectlyLoadsTheConfigurationProperties()
         {
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            SymConfig symConfigPoco = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-            Assert.IsTrue(symConfigPoco.sessionAuthHost == "preview.symphony.com");
+            var symConfigLoader = new SymConfigLoader();
+            var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "testConfigPsdev.json");
+            var symConfig = symConfigLoader.loadFromFile(configPath);
+            Assert.IsNotNull(symConfig);
+            Assert.AreEqual("psdev.symphony.com", symConfig.agentHost);
+            Assert.AreEqual(443, symConfig.agentPort);
+            Assert.AreEqual("psdev.symphony.com", symConfig.keyAuthHost);
+            Assert.AreEqual(443, symConfig.keyAuthPort);
+            Assert.AreEqual("psdev.symphony.com", symConfig.podHost);
+            Assert.AreEqual("bot.enterprise.integration.gitlab@bot.symphony.com", symConfig.botEmailAddress);
+            Assert.AreEqual("privatekey.pem", symConfig.botPrivateKeyName);
+            Assert.AreEqual("bot.enterprise.integration.gitlab", symConfig.botUsername);
         }
     }
 }

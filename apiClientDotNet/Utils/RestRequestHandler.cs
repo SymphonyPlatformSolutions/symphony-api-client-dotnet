@@ -159,9 +159,10 @@ namespace apiClientDotNet.Utils
 
         public string ReadResponse(HttpWebResponse resp)
         {
-            var reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
-            var responseString = reader.ReadToEnd();
-            return responseString;
+            using (var reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
 
