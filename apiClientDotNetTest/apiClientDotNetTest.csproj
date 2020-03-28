@@ -1,26 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RuntimeFrameworkVersion>2.2.8</RuntimeFrameworkVersion>
     <IsPackable>false</IsPackable>
-
     <PackageId>symphony-apiclient-dotnet-test</PackageId>
-
     <Authors>Platform Solutions</Authors>
-
     <Company>Symphont LLC</Company>
-
     <Product>SymphonyApiClientDotNetTest</Product>
-
     <PackageProjectUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet</PackageProjectUrl>
-
     <PackageLicenseUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet/blob/master/LICENSE</PackageLicenseUrl>
-
     <Copyright>2018 Platform Solutions Symphony</Copyright>
-
     <RepositoryUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet</RepositoryUrl>
-
     <Description>Symphony API Client for .NET to build bots.</Description>
   </PropertyGroup>
 
