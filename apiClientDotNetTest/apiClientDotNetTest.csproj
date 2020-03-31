@@ -41,15 +41,6 @@
     <None Update="Resources\AttachmentTest.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\bundle.json">
-      <Generator>MSDataSetGenerator</Generator>
-    </None>
-    <None Update="Resources\testConfigPsdevTwo.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\testConfigPsdev.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

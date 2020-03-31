@@ -27,7 +27,7 @@ namespace apiClientDotNetTest
         public void ChatBotTest()
         {
             var symConfigLoader = new SymConfigLoader();
-            var configPathOne = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "testConfigPsdev.json");
+            var configPathOne = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
             var symConfigOne = symConfigLoader.loadFromFile(configPathOne);
             var botAuthOne = new SymBotRSAAuth(symConfigOne);
             botAuthOne.authenticate();

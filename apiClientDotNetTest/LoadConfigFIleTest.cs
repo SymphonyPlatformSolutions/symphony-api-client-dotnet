@@ -14,17 +14,15 @@ namespace apiClientDotNetTest
         public void ForGivenConfigFile_CorrectlyLoadsTheConfigurationProperties()
         {
             var symConfigLoader = new SymConfigLoader();
-            var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "testConfigPsdev.json");
+            var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
             var symConfig = symConfigLoader.loadFromFile(configPath);
             Assert.IsNotNull(symConfig);
-            Assert.AreEqual("psdev.symphony.com", symConfig.agentHost);
-            Assert.AreEqual(443, symConfig.agentPort);
-            Assert.AreEqual("psdev.symphony.com", symConfig.keyAuthHost);
-            Assert.AreEqual(443, symConfig.keyAuthPort);
-            Assert.AreEqual("psdev.symphony.com", symConfig.podHost);
-            Assert.AreEqual("bot.enterprise.integration.gitlab@bot.symphony.com", symConfig.botEmailAddress);
-            Assert.AreEqual("privatekey.pem", symConfig.botPrivateKeyName);
-            Assert.AreEqual("bot.enterprise.integration.gitlab", symConfig.botUsername);
+            Assert.IsNotNull(symConfig.agentHost);
+            Assert.IsNotNull(symConfig.keyAuthHost);
+            Assert.IsNotNull(symConfig.podHost);
+            Assert.IsNotNull(symConfig.botEmailAddress);
+            Assert.IsNotNull(symConfig.botPrivateKeyName);
+            Assert.IsNotNull(symConfig.botUsername);
         }
     }
 }

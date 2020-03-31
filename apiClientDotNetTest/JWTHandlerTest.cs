@@ -12,7 +12,7 @@ namespace apiClientDotNetTest
         public void ForGivenRsaConfig_CanReadConfigAndCreateJwt()
         {
             var symConfigLoader = new SymConfigLoader();
-            var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "testConfigPsdev.json");
+            var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
             var symConfig = symConfigLoader.loadFromFile(configPath);
             var jwtHandler = new JWTHandler();
             var jwt = jwtHandler.generateJWT(symConfig);

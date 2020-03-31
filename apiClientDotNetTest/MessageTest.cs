@@ -23,7 +23,7 @@ namespace apiClientDotNetTest
         {         
             var symConfigLoader = new SymConfigLoader();
             attachmentTestPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AttachmentTest.txt");
-            var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "testConfigPsdev.json");
+            var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
             var symConfig = symConfigLoader.loadFromFile(configPath);
             var botAuth = new SymBotRSAAuth(symConfig);
             botAuth.authenticate();
