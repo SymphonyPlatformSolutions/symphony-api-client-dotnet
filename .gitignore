@@ -1,7 +1,6 @@
 #Junk Files
 *.DS_Store
 [Tt]humbs.db
-*.config.json
 
 #Visual Studio Files
 [Oo]bj

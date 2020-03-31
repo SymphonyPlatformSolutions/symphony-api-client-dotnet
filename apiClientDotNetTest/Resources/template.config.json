@@ -1,0 +1,23 @@
+﻿// Please refer to the Symphony developer guide to correctly fill this template:
+// https://developers.symphony.com/symphony-developer/docs/configuration-1
+{
+  "sessionAuthHost": "COMPANYNAME-api.symphony.com",
+  "sessionAuthPort": 8444,
+  "keyAuthHost": "COMPANYNAME-api.symphony.com",
+  "keyAuthPort": 8444,
+  "podHost": "COMPANYNAME.symphony.com",
+  "podPort": 443,
+  "agentHost": "COMPANYNAME.symphony.com",
+  "agentPort": 443,
+  "botCertPath": "PATH",
+  "botCertName": "BOT-CERT-NAME",
+  "botCertPassword": "BOT-PASSWORD",
+  "botEmailAddress": "BOT-EMAIL-ADDRESS",
+  "appCertPath": "",
+  "appCertName": "",
+  "appCertPassword": "",
+  "proxyURL": "",
+  "proxyUsername": "",
+  "proxyPassword": "",
+  "authTokenRefreshPeriod": "30"
+}
