@@ -5,105 +5,91 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using apiClientDotNet.Models;
 using apiClientDotNet;
-using apiClientDotNet.Listeners;
-using apiClientDotNet.Services;
-using apiClientDotNet.Models.Events;
-using System.Net;
 using apiClientDotNet.Authentication;
-using apiClientDotNet.Clients;
 
 namespace apiClientDotNetTest
 {
     [TestClass]
     public class MessageTest
     {
-        [TestMethod]
-        public void MessageRoomTest()
-        {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-            SymBotAuth botAuth = new SymBotAuth(symConfig);
+        private static SymBotClient botClient = null;
+        private static string attachmentTestPath = null;
+        // to be moved to some integration tests config file
+        private static readonly string testUserName = "vlado.kragujevski";
+        private static readonly string testRoomName = "NETSDK";
+
+        [ClassInitialize]
+        public static void Setup(TestContext conext)
+        {         
+            var symConfigLoader = new SymConfigLoader();
+            attachmentTestPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AttachmentTest.txt");
+            var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
+            var symConfig = symConfigLoader.loadFromFile(configPath);
+            var botAuth = new SymBotRSAAuth(symConfig);
             botAuth.authenticate();
-            SymBotClient botClient = SymBotClient.initBot(symConfig, botAuth);
-            OutboundMessage message = new OutboundMessage();
-            message.message = "<messageML>Hello world!</messageML>";
-
-            
-            FileStream fileStream = File.OpenRead("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/AttachmentTest.txt");
-            List<FileStream> attachments = new List<FileStream>();
-            attachments.Add(fileStream);
-            message.attachments = attachments;
-            apiClientDotNet.Models.Stream stream = new apiClientDotNet.Models.Stream();
-            stream.streamId = "fu1cJFoklnYlR9vu1AOZ5X___pzXDKPXdA";
-
-            MessageClient messageClient = new MessageClient(botClient);
-            InboundMessage resp = messageClient.sendMessage(stream.streamId, message, false);
-
-            Assert.IsTrue(resp.messageId != null);
+            botClient = SymBotClient.initBot(symConfig, botAuth);        
         }
-
+     
         [TestMethod]
         public void SearchRoom()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-            SymBotAuth botAuth = new SymBotAuth(symConfig);
-            botAuth.authenticate();
-            SymBotClient botClient = SymBotClient.initBot(symConfig, botAuth);
-
-            StreamClient streamClient = botClient.getStreamsClient();
-            RoomSearchQuery roomSearchQuery = new RoomSearchQuery();
-            roomSearchQuery.query = "APITestRoom";
-            roomSearchQuery.active = true;
-            roomSearchQuery.isPrivate = true;
-            RoomSearchResult result = streamClient.searchRooms(roomSearchQuery, 0, 0);
-            Assert.IsTrue(result != null);
+            var streamClient = botClient.getStreamsClient();
+            var roomSearchQuery = new RoomSearchQuery
+            {
+                query = testRoomName,
+                active = true,
+                isPrivate = true
+            };
+            var result = streamClient.searchRooms(roomSearchQuery, 0, 0);
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.count >= 1);
         }
 
         [TestMethod]
-        public void GetUserIDFromUserNameTest()
+        public void GetUserIdByUserName()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-            SymBotAuth botAuth = new SymBotAuth(symConfig);
-            botAuth.authenticate();
-            SymBotClient botClient = SymBotClient.initBot(symConfig, botAuth);
-
-            UserClient userClient = botClient.getUsersClient();
-            UserInfo user = userClient.getUserFromUsername("mikepreview");
-
-            StreamClient streamClient = botClient.getStreamsClient();
-            RoomSearchQuery roomSearchQuery = new RoomSearchQuery();
-            roomSearchQuery.query = "APITestRoom";
-            roomSearchQuery.active = true;
-            roomSearchQuery.isPrivate = true;
-            NumericId id = new NumericId();
-            id.id = user.id;
-            roomSearchQuery.member = id;
-            RoomSearchResult result = streamClient.searchRooms(roomSearchQuery, 0, 0);
-
-            Assert.IsTrue(user != null);
+            var userClient = botClient.getUsersClient();
+            var user = userClient.getUserFromUsername(testUserName);
+            Assert.IsNotNull(user);
+            Assert.AreEqual("Vlado Kragujevski", user.displayName);
         }
 
         [TestMethod]
-        public void UserListStreams()
+        public void ListUserStreamsAndSendMessage()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-            SymBotAuth botAuth = new SymBotAuth(symConfig);
-            botAuth.authenticate();
-            SymBotClient botClient = SymBotClient.initBot(symConfig, botAuth);
+            var streamClient = botClient.getStreamsClient();
+            var streamTypes = new List<string>
+            {
+                "IM",
+                "ROOM"
+            };
+            var result = streamClient.getUserStreams(streamTypes,false);
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count >= 1);
 
-            StreamClient streamClient = botClient.getStreamsClient();
-            List<string> streamTypes = new List<string>();
-            streamTypes.Add("IM");
-            streamTypes.Add("ROOM");
-            List<StreamListItem> result = streamClient.getUserStreams(streamTypes,false);
-            Assert.IsTrue(result != null);
+            MessageRoomTest(result[0].id);
+        }
+
+        public void MessageRoomTest(string streamId)
+        {
+            var fileStream = File.OpenRead(attachmentTestPath);
+            var attachments = new List<FileStream>
+            {
+                fileStream
+            };
+            var message = new OutboundMessage
+            {
+                message = "<messageML>Hello world! From .NET SDK Integration Test.</messageML>"
+            };
+            message.attachments = attachments;
+            var stream = new apiClientDotNet.Models.Stream
+            {
+                streamId = streamId
+            };
+
+            var messageClient = new MessageClient(botClient);
+            var resp = messageClient.sendMessage(stream.streamId, message, false);
+            Assert.IsNotNull(resp.messageId);
         }
     }
 }

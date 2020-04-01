@@ -159,9 +159,10 @@ namespace apiClientDotNet.Utils
 
         public string ReadResponse(HttpWebResponse resp)
         {
-            var reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
-            var responseString = reader.ReadToEnd();
-            return responseString;
+            using (var reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
 
@@ -187,6 +188,11 @@ namespace apiClientDotNet.Utils
                         var fileName = Path.GetFileName(attachment.Name);
                         formData.Add(byteArrayContent, "attachment", fileName);
                     }
+                }
+                if (message.data != null)
+                {
+                    HttpContent jsonData = new StringContent(message.data);
+                    formData.Add(jsonData, "data", "data");
                 }
 
                 client.DefaultRequestHeaders.Add("sessionToken", symConfig.authTokens.sessionToken);

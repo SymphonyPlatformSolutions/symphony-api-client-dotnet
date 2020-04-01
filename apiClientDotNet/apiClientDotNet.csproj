@@ -1,25 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>symphony-apiclient-dotnet</PackageId>
     <Authors>Platform Solutions</Authors>
     <Company>Symphony LLC</Company>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Product>symphony-apiclient-dontnet</Product>
     <Description>.NET Symphony API client to build bots</Description>
     <Copyright>2018 Platform Solutions Symphony</Copyright>
     <PackageLicenseUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SymphonyPlatformSolutions/symphony-api-client-dotnet</RepositoryUrl>
-    <Version>1.0.18</Version>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BouncyCastle" Version="1.8.2" />
     <PackageReference Include="jose-jwt" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.6" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.2.2" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.5.0" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.0.0" />

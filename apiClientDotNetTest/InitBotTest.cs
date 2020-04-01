@@ -5,7 +5,7 @@ using apiClientDotNet;
 using apiClientDotNet.Listeners;
 using apiClientDotNet.Services;
 using apiClientDotNet.Models.Events;
-
+using apiClientDotNet.Authentication;
 
 namespace apiClientDotNetTest
 {
@@ -29,20 +29,19 @@ namespace apiClientDotNetTest
     [TestClass]
     public class InitBotTest
     {
+
         [TestMethod]
-        public void DatafeedCreateTest()
+        public void ForGivenRsaConfig_CanAuthenticateAndCreateDataFeed()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-            apiClientDotNet.Authentication.SymBotAuth botAuth = new apiClientDotNet.Authentication.SymBotAuth(symConfig);
+            var symConfig = new SymConfig();
+            var symConfigLoader = new SymConfigLoader();
+            var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
+            symConfig = symConfigLoader.loadFromFile(configPath);
+            var botAuth = new SymBotRSAAuth(symConfig);
             botAuth.authenticate();
-            SymBotClient botClient = SymBotClient.initBot(symConfig, botAuth);
+            var botClient = SymBotClient.initBot(symConfig, botAuth);
             DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
-
-            //datafeedEventsService.getEventsFromDatafeed();
-
-            //Assert.IsTrue(datafeedEventsService.datafeedId != null);
+            Assert.IsNotNull(datafeedEventsService.datafeedId);
         }
     }
 }

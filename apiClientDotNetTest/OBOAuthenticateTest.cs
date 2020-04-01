@@ -2,24 +2,30 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using apiClientDotNet.Models;
 using apiClientDotNet;
-using apiClientDotNet.Listeners;
-using apiClientDotNet.Services;
-using apiClientDotNet.Models.Events;
 using apiClientDotNet.Authentication;
 using apiClientDotNet.Clients;
 using System.Collections.Generic;
+using System.IO;
 
 namespace apiClientDotNetTest
 {
     [TestClass]
     public class OBOAuthenticateTest
     {
+        private static SymConfig symConfig = null;
+
+        [ClassInitialize]
+        public static void Setup(TestContext conext)
+        {
+            var symConfigLoader = new SymConfigLoader();
+            var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
+            symConfig = symConfigLoader.loadFromFile(configPath);
+        }
+
         [TestMethod]
         public void OBOAuth()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig3.json");
+
             SymOBOAuth oboAuth = new SymOBOAuth(symConfig);
             oboAuth.sessionAppAuthenticate();
             SymOBOUserAuth auth = oboAuth.getUserAuth("mike.scannell@symphony.com");
@@ -45,9 +51,6 @@ namespace apiClientDotNetTest
         [TestMethod]
         public void OBOLogoutTest()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig3.json");
             SymOBOAuth oboAuth = new SymOBOAuth(symConfig);
             oboAuth.sessionAppAuthenticate();
             SymOBOUserAuth auth = oboAuth.getUserAuth("mike.scannell@symphony.com");
@@ -71,9 +74,6 @@ namespace apiClientDotNetTest
         [TestMethod]
         public void OBOUserAndRoomSeaerch()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig3.json");
             SymOBOAuth oboAuth = new SymOBOAuth(symConfig);
             oboAuth.sessionAppAuthenticate();
             SymOBOUserAuth auth = oboAuth.getUserAuth("mike.scannell@symphony.com");
@@ -94,9 +94,6 @@ namespace apiClientDotNetTest
         [TestMethod]
         public void OBOUserLookUpTest()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig3.json");
             SymOBOAuth oboAuth = new SymOBOAuth(symConfig);
             oboAuth.sessionAppAuthenticate();
             SymOBOUserAuth auth = oboAuth.getUserAuth("mike.scannell@symphony.com");
@@ -111,9 +108,6 @@ namespace apiClientDotNetTest
         [TestMethod]
         public void OBOIMCreateTest()
         {
-            SymConfig symConfig = new SymConfig();
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            symConfig = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig3.json");
             SymOBOAuth oboAuth = new SymOBOAuth(symConfig);
             oboAuth.sessionAppAuthenticate();
             SymOBOUserAuth auth = oboAuth.getUserAuth("mike.scannell@symphony.com");

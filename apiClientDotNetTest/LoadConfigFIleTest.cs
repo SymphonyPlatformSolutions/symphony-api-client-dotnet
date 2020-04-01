@@ -11,11 +11,18 @@ namespace apiClientDotNetTest
     {
 
         [TestMethod]
-        public void LoadConfigTest()
+        public void ForGivenConfigFile_CorrectlyLoadsTheConfigurationProperties()
         {
-            SymConfigLoader symConfigLoader = new SymConfigLoader();
-            SymConfig symConfigPoco = symConfigLoader.loadFromFile("C:/Users/Michael/Documents/Visual Studio 2017/Projects/apiClientDotNet/apiClientDotNetTest/Resources/testConfig.json");
-            Assert.IsTrue(symConfigPoco.sessionAuthHost == "preview.symphony.com");
+            var symConfigLoader = new SymConfigLoader();
+            var configPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
+            var symConfig = symConfigLoader.loadFromFile(configPath);
+            Assert.IsNotNull(symConfig);
+            Assert.IsNotNull(symConfig.agentHost);
+            Assert.IsNotNull(symConfig.keyAuthHost);
+            Assert.IsNotNull(symConfig.podHost);
+            Assert.IsNotNull(symConfig.botEmailAddress);
+            Assert.IsNotNull(symConfig.botPrivateKeyName);
+            Assert.IsNotNull(symConfig.botUsername);
         }
     }
 }
