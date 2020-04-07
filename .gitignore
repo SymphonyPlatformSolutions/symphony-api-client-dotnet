@@ -1,6 +1,8 @@
 #Junk Files
 *.DS_Store
 [Tt]humbs.db
+*/Resources/config.json
+*/Resources/integration.parameters.json
 
 #Visual Studio Files
 [Oo]bj

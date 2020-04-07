@@ -155,7 +155,8 @@ namespace apiClientDotNet.Clients
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
-                infoList = JsonConvert.DeserializeObject<List<UserInfo>>(body);
+                var userInfoList = JsonConvert.DeserializeObject<UserInfoList>(body);
+                infoList = userInfoList.users;
             }
             resp.Close();
             return infoList;

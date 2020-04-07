@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using apiClientDotNet.Models;
 using apiClientDotNet;
 using apiClientDotNet.Authentication;
+using Microsoft.Extensions.Configuration;
 
 namespace apiClientDotNetTest
 {
@@ -14,13 +15,16 @@ namespace apiClientDotNetTest
     {
         private static SymBotClient botClient = null;
         private static string attachmentTestPath = null;
-        // to be moved to some integration tests config file
-        private static readonly string testUserName = "vlado.kragujevski";
-        private static readonly string testRoomName = "NETSDK";
+        private static IConfigurationRoot config;
 
         [ClassInitialize]
         public static void Setup(TestContext conext)
-        {         
+        {
+            // Load integration test settings
+            var integrationConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "integration.parameters.json");
+            config = new ConfigurationBuilder().AddJsonFile(integrationConfigPath).Build();
+
+            // Create SymBotClient
             var symConfigLoader = new SymConfigLoader();
             attachmentTestPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AttachmentTest.txt");
             var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "config.json");
@@ -36,7 +40,7 @@ namespace apiClientDotNetTest
             var streamClient = botClient.getStreamsClient();
             var roomSearchQuery = new RoomSearchQuery
             {
-                query = testRoomName,
+                query = config.GetSection("test_room_name").Value,
                 active = true,
                 isPrivate = true
             };
@@ -49,9 +53,9 @@ namespace apiClientDotNetTest
         public void GetUserIdByUserName()
         {
             var userClient = botClient.getUsersClient();
-            var user = userClient.getUserFromUsername(testUserName);
+            var user = userClient.getUserFromUsername(config.GetSection("test_username").Value);
             Assert.IsNotNull(user);
-            Assert.AreEqual("Vlado Kragujevski", user.displayName);
+            Assert.AreEqual(config.GetSection("test_displayname").Value, user.displayName);
         }
 
         [TestMethod]
