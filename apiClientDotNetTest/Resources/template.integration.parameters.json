@@ -1,0 +1,14 @@
+﻿// Please use this template to create the integration parameters configuration file
+// The integration tests needs a file named integration.parameters.json in the Resources folder
+{
+  // Parameters common for all tests
+  "test_username": "user name",
+  "test_useremail": "user email",
+  "test_displayname": "account display name",
+  "test_room_name":  "name of a room",
+  // Parameters related to a specific test
+  "UserClientIntegrationTest": {
+    "test_email_addresses": "comma separated string of email addresses",
+    "test_search_user_query": "search by some query like name"
+  }
+}
