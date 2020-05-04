@@ -65,10 +65,10 @@ namespace apiClientDotNet.Clients
             return info.users;
         }
 
-        public UserInfo getUserFromId(long id, Boolean local) {
+        public List<UserInfo> getUserFromId(long id, Boolean local) {
 
             SymConfig symConfig = botClient.getConfig();
-            UserInfo info = null;
+            UserInfoList info = null;
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETUSERSV3 + "?uid=" + id + "&local=" + local;
 
@@ -81,10 +81,10 @@ namespace apiClientDotNet.Clients
             else if (resp.StatusCode == HttpStatusCode.OK)
             {
                 string body = restRequestHandler.ReadResponse(resp);
-                info = JsonConvert.DeserializeObject<UserInfo>(body);
+                info = JsonConvert.DeserializeObject<UserInfoList>(body);
             }
             resp.Close();
-            return info;
+            return info.users;
         }
 
         public List<UserInfo> getUsersFromIdList(List<long> idList, Boolean local) {
