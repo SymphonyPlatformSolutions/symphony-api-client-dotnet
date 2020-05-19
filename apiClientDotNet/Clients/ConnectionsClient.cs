@@ -104,7 +104,7 @@ namespace apiClientDotNet.Clients
             SymConfig symConfig = botClient.getConfig();
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.ACCEPTCONNECTION;
-            HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(userIdObject, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
             resp.Close();
             return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
@@ -118,7 +118,7 @@ namespace apiClientDotNet.Clients
             SymConfig symConfig = botClient.getConfig();
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REJECTCONNECTION;
-            HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(userIdObject, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
             resp.Close();
             return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
@@ -132,7 +132,7 @@ namespace apiClientDotNet.Clients
             SymConfig symConfig = botClient.getConfig();
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SENDCONNECTIONREQUEST;
-            HttpWebResponse resp = restRequestHandler.executeRequest(userId, url, false, WebRequestMethods.Http.Post, symConfig, true);
+            HttpWebResponse resp = restRequestHandler.executeRequest(userIdObject, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
             resp.Close();
             return JsonConvert.DeserializeObject<InboundConnectionRequest>(body);
@@ -163,6 +163,7 @@ namespace apiClientDotNet.Clients
 
         private class UserId
         {
+            [JsonProperty("userId")]
             long userId;
 
             public long getUserId()

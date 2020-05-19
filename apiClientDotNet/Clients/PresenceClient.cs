@@ -59,6 +59,7 @@ namespace apiClientDotNet.Clients
 
         private class Category
         {
+            [JsonProperty("category")]
             private String category;
 
             public String getCategory()
