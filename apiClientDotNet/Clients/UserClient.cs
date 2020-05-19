@@ -65,7 +65,7 @@ namespace apiClientDotNet.Clients
             return info.users;
         }
 
-        public List<UserInfo> getUserFromId(long id, Boolean local) {
+        public UserInfo getUserFromId(long id, Boolean local) {
 
             SymConfig symConfig = botClient.getConfig();
             UserInfoList info = null;
@@ -84,7 +84,7 @@ namespace apiClientDotNet.Clients
                 info = JsonConvert.DeserializeObject<UserInfoList>(body);
             }
             resp.Close();
-            return info.users;
+            return info.users[0];
         }
 
         public List<UserInfo> getUsersFromIdList(List<long> idList, Boolean local) {
