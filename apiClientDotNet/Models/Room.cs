@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models
@@ -35,7 +34,7 @@ namespace apiClientDotNet.Models
         public Boolean viewHistory { get; set; }
 
         [JsonProperty("multiLateralRoom")]
-        public Boolean multiLateralRoom { get; set; }
+        public Boolean? multiLateralRoom { get; set; }
 
         [JsonProperty("keywords")]
         public List<Keyword> keywords { get; set; }
