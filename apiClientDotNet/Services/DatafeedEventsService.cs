@@ -236,16 +236,12 @@ namespace apiClientDotNet.Services
                             break;
 
 			            case "SYMPHONYELEMENTSACTION":
-                            var StreamID = eventv4.payload.symphonyElementsAction.formStream.streamId.ToString();
-                            StreamID = StreamID.Replace("=","");
-                            StreamID = StreamID.Replace("/","_");
-                            StreamID = StreamID.Replace("+","-");
-
+                            string streamId = eventv4.payload.symphonyElementsAction.stream.streamId.ToString();
                             SymphonyElementsAction symphonyElementsAction = eventv4.payload.symphonyElementsAction;
 			                User user = eventv4.initiator.user;
                             foreach (ElementsActionListener listener in elementsActionListeners)
                             {
-                                listener.onFormMessage(user, StreamID, symphonyElementsAction);
+                                listener.onFormMessage(user, streamId, symphonyElementsAction);
                             }
                             break;  
                         default:

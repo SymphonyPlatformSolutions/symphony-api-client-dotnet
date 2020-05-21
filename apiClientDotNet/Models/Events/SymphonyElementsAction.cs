@@ -1,38 +1,35 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models.Events
 {
+    public class SymphonyElementsAction
+    {
+        [JsonProperty("formStream")]
+        public Stream formStream
+        {
+            get { return stream; }
+            set { stream = value;}
+        }
 
-public class SymphonyElementsAction
-{
+        [JsonProperty("stream")]
+        public Stream stream { get; set; }
 
-    //TODO futureproof this by checking for streamId or formStream.streamId
-    //TODO add get StreamType checker like Java has
-    [JsonProperty("actionStream")]
-    public ActionStream actionStream { get; set; }
-    
-    [JsonProperty("formStream")]
-    public Stream formStream { get; set; }
+        [JsonProperty("formMessageId")]
+        public string formMessageId { get; set; }
 
-    [JsonProperty("formMessageId")]
-    public string formMessageId { get; set; }
+        [JsonProperty("formId")]
+        public string formId { get; set; }
 
-    [JsonProperty("formId")]
-    public string formId { get; set; }
+        [JsonProperty("formValues")]
+        public Dictionary<string, object> formValues { get; set; }
 
-    [JsonProperty("formValues")]
-    public Dictionary<string, object> formValues { get; set; } 
-    // public FormValues formValues { get; set; }
-}
-
-
-public class ActionStream
-{
-    [JsonProperty("streamId")]
-    public string streamId { get; set; }
-}
-
+        [OnDeserialized]
+        internal void FixIds(StreamingContext context)
+        {
+            stream.streamId = stream.streamId.Replace('/', '_').Replace('+', '-').Replace("=","");
+            formMessageId = formMessageId.Replace('/', '_').Replace('+', '-').Replace("=","");
+        }
+    }
 }
