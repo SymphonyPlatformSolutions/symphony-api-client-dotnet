@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace apiClientDotNet.Listeners
+﻿namespace apiClientDotNet.Listeners
 {
-    class PresenceUpdateListener
+    public interface PresenceUpdateListener
     {
     }
 }

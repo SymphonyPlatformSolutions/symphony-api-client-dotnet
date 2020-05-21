@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
 using apiClientDotNet.Models.Events;
 
 namespace apiClientDotNet.Listeners
 {
-    public abstract class ElementsActionListener
+    public interface ElementsActionListener
     {
-        public virtual void onElementsAction(User initiator, SymphonyElementsAction action) { }
+        void onElementsAction(User initiator, SymphonyElementsAction action);
 
-        public virtual void onFormMessage(User initiator, String fstreamid, SymphonyElementsAction fform) { }
+        void onFormMessage(User initiator, String fstreamid, SymphonyElementsAction form);
     }
 }

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using apiClientDotNet.Models;
-using apiClientDotNet.Models.Events;
+﻿using apiClientDotNet.Models;
+
 
 namespace apiClientDotNet.Listeners
 {
-    public abstract class IMListener
+    public interface IMListener
     {
-        public virtual void onIMMessage(Message message) { }
-        public virtual void onIMCreated(Stream stream) { }
-    //    public virtual void onFormMessage(String fstreamid, SymphonyElementsAction fform) { }
+        void onIMMessage(Message message);
+        void onIMCreated(Stream stream);
     }
 }

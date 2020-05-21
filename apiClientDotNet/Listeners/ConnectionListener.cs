@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using apiClientDotNet.Models;
+﻿using apiClientDotNet.Models;
 
 namespace apiClientDotNet.Listeners
 {
-    public abstract class ConnectionListener
+    public interface ConnectionListener
     {
-        public virtual void onConnectionAccepted(User user) { }
-        public virtual void onConnectionRequested(User user) { }
+        void onConnectionAccepted(User user);
+        void onConnectionRequested(User user);
     }
 }
