@@ -24,7 +24,24 @@ namespace apiClientDotNet.Models
         public long lastMessageDate { get; set; }
 
         [JsonProperty("streamType")]
-        public StreamType streamType { get; set; }
+        public StreamType StreamType { get; set; }
+
+        [JsonIgnore]
+        [Obsolete("Please instead of streamType use StreamType")]
+        public string streamType
+        { 
+            get
+            {
+                return StreamType?.type;
+            }
+            set
+            {
+                StreamType = new StreamType
+                {
+                    type = value
+                };
+            }
+        }
 
         [JsonProperty("streamAttributes")]
         public StreamAttributes streamAttributes { get; set; }

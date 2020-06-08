@@ -33,8 +33,16 @@ namespace apiClientDotNet.Models
         [JsonProperty("viewHistory")]
         public Boolean viewHistory { get; set; }
 
+        [JsonIgnore]
+        [Obsolete("Please instead of multiLateralRoom use MultiLateralRoom")]
+        public Boolean multiLateralRoom
+        {
+            get { return MultiLateralRoom.HasValue ? MultiLateralRoom.Value : default(Boolean); }
+            set { MultiLateralRoom = value; }
+        }
+
         [JsonProperty("multiLateralRoom")]
-        public Boolean? multiLateralRoom { get; set; }
+        public Boolean? MultiLateralRoom { get; set; }
 
         [JsonProperty("keywords")]
         public List<Keyword> keywords { get; set; }

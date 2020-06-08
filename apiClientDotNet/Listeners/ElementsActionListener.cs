@@ -4,10 +4,10 @@ using apiClientDotNet.Models.Events;
 
 namespace apiClientDotNet.Listeners
 {
-    public interface ElementsActionListener
+    public abstract class ElementsActionListener
     {
-        void onElementsAction(User initiator, SymphonyElementsAction action);
+        public virtual void onElementsAction(User initiator, SymphonyElementsAction action) { }
 
-        void onFormMessage(User initiator, String fstreamid, SymphonyElementsAction form);
+        public virtual void onFormMessage(User initiator, String fstreamid, SymphonyElementsAction fform) { }
     }
 }

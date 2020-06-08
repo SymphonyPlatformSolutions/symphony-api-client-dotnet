@@ -2,9 +2,9 @@
 
 namespace apiClientDotNet.Listeners
 {
-    public interface ConnectionListener
+    public abstract class ConnectionListener
     {
-        void onConnectionAccepted(User user);
-        void onConnectionRequested(User user);
+        public virtual void onConnectionAccepted(User user) { }
+        public virtual void onConnectionRequested(User user) { }
     }
 }

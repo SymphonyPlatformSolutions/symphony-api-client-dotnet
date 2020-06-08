@@ -3,9 +3,9 @@
 
 namespace apiClientDotNet.Listeners
 {
-    public interface IMListener
+    public abstract class IMListener
     {
-        void onIMMessage(Message message);
-        void onIMCreated(Stream stream);
+        public virtual void onIMMessage(Message message) { }
+        public virtual void onIMCreated(Stream stream) { }
     }
 }

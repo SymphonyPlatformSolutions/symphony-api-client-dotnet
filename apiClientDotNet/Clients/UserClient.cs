@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using apiClientDotNet.Clients.Constants;
 using apiClientDotNet.Models;
-using apiClientDotNet.Clients.Constants;
 using apiClientDotNet.Utils;
-using System.Net;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 
 
 namespace apiClientDotNet.Clients
@@ -23,7 +22,8 @@ namespace apiClientDotNet.Clients
             botClient = client;
 
         }
-        public UserInfo getUserFromUsername(String username) {
+        public UserInfo getUserFromUsername(String username)
+        {
 
             SymConfig symConfig = botClient.getConfig();
             UserInfo info = null;
@@ -44,7 +44,8 @@ namespace apiClientDotNet.Clients
             return info;
         }
 
-        public List<UserInfo> getUserFromEmail(String email, Boolean local) {
+        public List<UserInfo> getUserFromEmail(String email, Boolean local)
+        {
 
             SymConfig symConfig = botClient.getConfig();
             UserInfoList info = null;
@@ -65,7 +66,8 @@ namespace apiClientDotNet.Clients
             return info.users;
         }
 
-        public UserInfo getUserFromId(long id, Boolean local) {
+        public UserInfo getUserFromId(long id, Boolean local)
+        {
 
             SymConfig symConfig = botClient.getConfig();
             UserInfoList info = null;
@@ -84,25 +86,34 @@ namespace apiClientDotNet.Clients
                 info = JsonConvert.DeserializeObject<UserInfoList>(body);
             }
             resp.Close();
-            return info.users[0];
+
+            if (info != null && info.users != null && info.users.Count > 0)
+            {
+                return info.users[0];
+            }
+
+            throw new Exception("No user found or empty user list returned.");
         }
 
-        public List<UserInfo> getUsersFromIdList(List<long> idList, Boolean local) {
+        public List<UserInfo> getUsersFromIdList(List<long> idList, Boolean local)
+        {
             return getUsersV3(null, idList, local);
         }
 
-        public List<UserInfo> getUsersFromEmailList(List<String> emailList, Boolean local) {
+        public List<UserInfo> getUsersFromEmailList(List<String> emailList, Boolean local)
+        {
             return getUsersV3(emailList, null, local);
         }
 
 
 
-    public List<UserInfo> getUsersV3(List<String> emailList, List<long> idList, Boolean local) { 
+        public List<UserInfo> getUsersV3(List<String> emailList, List<long> idList, Boolean local)
+        {
 
-        SymConfig symConfig = botClient.getConfig();
-        List<UserInfo> infoList = new List<UserInfo>();
-        Boolean emailBased = false;
-        StringBuilder lookUpListString = new StringBuilder();
+            SymConfig symConfig = botClient.getConfig();
+            List<UserInfo> infoList = new List<UserInfo>();
+            Boolean emailBased = false;
+            StringBuilder lookUpListString = new StringBuilder();
             if (emailList != null)
             {
                 if (emailList.Count == 0)
@@ -136,11 +147,12 @@ namespace apiClientDotNet.Clients
 
             RestRequestHandler restRequestHandler = new RestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETUSERSV3;
-            if(emailBased)
+            if (emailBased)
             {
                 url = url + "?email=" + lookUpListString.ToString();
 
-            } else
+            }
+            else
             {
                 url = url + "?uid=" + lookUpListString.ToString();
 
@@ -162,7 +174,8 @@ namespace apiClientDotNet.Clients
             return infoList;
         }
 
-        public UserSearchResult searchUsers(String query, Boolean local, int skip, int limit, UserFilter filter) {
+        public UserSearchResult searchUsers(String query, Boolean local, int skip, int limit, UserFilter filter)
+        {
 
             UserSearchResult result = null;
             SymConfig symConfig = botClient.getConfig();
@@ -193,7 +206,8 @@ namespace apiClientDotNet.Clients
                     url = url + "?limit=" + limit;
                 }
             }
-            if (local){
+            if (local)
+            {
                 if (url.Contains("?"))
                 {
                     url = url + "&local=" + local;
@@ -222,7 +236,8 @@ namespace apiClientDotNet.Clients
             return result;
         }
 
-        public UserInfo getSessionUser(){
+        public UserInfo getSessionUser()
+        {
 
             SymConfig symConfig = botClient.getConfig();
             UserInfo info = null;

@@ -1,17 +1,20 @@
+using apiClientDotNet.Utils;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 
 namespace apiClientDotNet.Models.Events
 {
     public class SymphonyElementsAction
     {
+
+        [JsonIgnore]
+        [Obsolete("actionStream is not used since Symphony 1.57+")]
+        public ActionStream actionStream { get; set; }
+
         [JsonProperty("formStream")]
-        public Stream formStream
-        {
-            get { return stream; }
-            set { stream = value;}
-        }
+        public Stream formStream { get; set; }
 
         [JsonProperty("stream")]
         public Stream stream { get; set; }
@@ -28,8 +31,19 @@ namespace apiClientDotNet.Models.Events
         [OnDeserialized]
         internal void FixIds(StreamingContext context)
         {
-            stream.streamId = stream.streamId.Replace('/', '_').Replace('+', '-').Replace("=","");
-            formMessageId = formMessageId.Replace('/', '_').Replace('+', '-').Replace("=","");
+            if (stream != null)
+            {
+                stream.streamId = StreamUtils.FixId(stream.streamId);
+            }
+            formMessageId = StreamUtils.FixId(formMessageId);
+        }
+
+
+        [Obsolete("ActionStream is not used since Symphony 1.57+")]
+        public class ActionStream
+        {
+            [JsonProperty("streamId", NullValueHandling = NullValueHandling.Ignore)]
+            public string streamId { get; set; }
         }
     }
 }
