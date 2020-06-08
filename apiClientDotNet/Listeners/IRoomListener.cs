@@ -1,9 +1,10 @@
 ﻿using apiClientDotNet.Models;
 using apiClientDotNet.Models.Events;
+using System;
 
 namespace apiClientDotNet.Listeners
 {
-    public interface RoomListener
+    public interface IRoomListener
     {
         void onRoomMessage(Message message);
         void onRoomCreated(RoomCreated roomCreated);
@@ -13,6 +14,12 @@ namespace apiClientDotNet.Listeners
         void onRoomReactivated(Stream stream);
         void onRoomUpdated(RoomUpdated roomUpdated);
         void onUserJoinedRoom(UserJoinedRoom userJoinedRoom);
-        void onUserLeftRoom(UserLeftRoom userLeftRoom); 
+        void onUserLeftRoom(UserLeftRoom userLeftRoom);
+    }
+
+    [Obsolete("Please instead use directly IRoomListener")]
+    public interface RoomListener : IRoomListener
+    {
+
     }
 }

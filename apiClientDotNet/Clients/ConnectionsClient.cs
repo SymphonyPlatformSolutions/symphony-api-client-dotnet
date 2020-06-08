@@ -61,7 +61,7 @@ namespace apiClientDotNet.Clients
             }
 
             SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = CreateRestHadnler();
+            RestRequestHandler restRequestHandler = CreateRestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETCONNECTIONS;
 
 
@@ -99,7 +99,7 @@ namespace apiClientDotNet.Clients
             UserId userIdObject = new UserId();
             userIdObject.setUserId(userId);
             SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = CreateRestHadnler();
+            RestRequestHandler restRequestHandler = CreateRestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.ACCEPTCONNECTION;
             HttpWebResponse resp = restRequestHandler.executeRequest(userIdObject, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
@@ -113,7 +113,7 @@ namespace apiClientDotNet.Clients
             UserId userIdObject = new UserId();
             userIdObject.setUserId(userId);
             SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = CreateRestHadnler();
+            RestRequestHandler restRequestHandler = CreateRestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REJECTCONNECTION;
             HttpWebResponse resp = restRequestHandler.executeRequest(userIdObject, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
@@ -127,7 +127,7 @@ namespace apiClientDotNet.Clients
             UserId userIdObject = new UserId();
             userIdObject.setUserId(userId);
             SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = CreateRestHadnler();
+            RestRequestHandler restRequestHandler = CreateRestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.SENDCONNECTIONREQUEST;
             HttpWebResponse resp = restRequestHandler.executeRequest(userIdObject, url, false, WebRequestMethods.Http.Post, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
@@ -139,7 +139,7 @@ namespace apiClientDotNet.Clients
         public InboundConnectionRequest getConnectionRequestStatus(long userId)
         {
             SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = CreateRestHadnler();
+            RestRequestHandler restRequestHandler = CreateRestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.GETCONNECTIONSTATUS.Replace("{userId}", userId.ToString());
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
@@ -150,14 +150,14 @@ namespace apiClientDotNet.Clients
         public void removeConnection(long userId)
         {
             SymConfig symConfig = botClient.getConfig();
-            RestRequestHandler restRequestHandler = CreateRestHadnler();
+            RestRequestHandler restRequestHandler = CreateRestRequestHandler();
             string url = CommonConstants.HTTPSPREFIX + symConfig.podHost + ":" + symConfig.podPort + PodConstants.REMOVECONNECTION.Replace("{userId}", userId.ToString());
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Post, symConfig, true);
             //string body = restRequestHandler.ReadResponse(resp);
             resp.Close();
         }
 
-        protected virtual RestRequestHandler CreateRestHadnler()
+        protected virtual RestRequestHandler CreateRestRequestHandler()
         {
             return new RestRequestHandler();
         }

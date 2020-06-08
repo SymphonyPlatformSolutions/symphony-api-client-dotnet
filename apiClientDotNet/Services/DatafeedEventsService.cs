@@ -14,10 +14,10 @@ namespace apiClientDotNet.Services
     {
 
         static bool stopLoop = false;
-        private List<RoomListener> roomListeners;
-        private List<IMListener> IMListeners;
-        private List<ConnectionListener> connectionListeners;
-	    private List<ElementsActionListener> elementsActionListeners;
+        private List<IRoomListener> roomListeners;
+        private List<IIMListener> IMListeners;
+        private List<IConnectionListener> connectionListeners;
+	    private List<IElementsActionListener> elementsActionListeners;
         private DatafeedClient datafeedClient;
         private SymBotClient botClient;
         public String datafeedId;
@@ -26,10 +26,10 @@ namespace apiClientDotNet.Services
         public DatafeedEventsService(SymBotClient client)
         {
             this.botClient = client;
-            roomListeners = new List<RoomListener>();
-            IMListeners = new List<IMListener>();
-            connectionListeners = new List<ConnectionListener>();
-	        elementsActionListeners = new List<ElementsActionListener>();
+            roomListeners = new List<IRoomListener>();
+            IMListeners = new List<IIMListener>();
+            connectionListeners = new List<IConnectionListener>();
+	        elementsActionListeners = new List<IElementsActionListener>();
             datafeedClient = new DatafeedClient();
             datafeed = datafeedClient.createDatafeed(client.getConfig());
             datafeedId = datafeed.datafeedID;
@@ -38,10 +38,10 @@ namespace apiClientDotNet.Services
 
         public DatafeedClient init(SymConfig symConfig)
         {
-            roomListeners = new List<RoomListener>();
-            IMListeners = new List<IMListener>();
-            connectionListeners = new List<ConnectionListener>();
-	        elementsActionListeners = new List<ElementsActionListener>();
+            roomListeners = new List<IRoomListener>();
+            IMListeners = new List<IIMListener>();
+            connectionListeners = new List<IConnectionListener>();
+	        elementsActionListeners = new List<IElementsActionListener>();
             datafeedClient = new DatafeedClient();
 
             return datafeedClient;
@@ -134,14 +134,14 @@ namespace apiClientDotNet.Services
                             MessageSent messageSent = eventv4.payload.messageSent;
                             if (messageSent.message.stream.streamType.Equals("ROOM"))
                             {
-                                foreach (RoomListener listener in roomListeners)
+                                foreach (IRoomListener listener in roomListeners)
                                 {
                                     listener.onRoomMessage(messageSent.message);
                                 }
                             }
                             else
                             {
-                                foreach (IMListener listener in IMListeners)
+                                foreach (IIMListener listener in IMListeners)
                                 {
                                     listener.onIMMessage(messageSent.message);
                                 }
@@ -149,7 +149,7 @@ namespace apiClientDotNet.Services
                             break;
                         case "INSTANTMESSAGECREATED":
 
-                            foreach (IMListener listeners in IMListeners)
+                            foreach (IIMListener listeners in IMListeners)
                             {
                                 listeners.onIMCreated(eventv4.payload.instantMessageCreated.stream);
                             }
@@ -157,7 +157,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMCREATED":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (IRoomListener listener in roomListeners)
                             {
                                 listener.onRoomCreated(eventv4.payload.roomCreated);
                             }
@@ -165,7 +165,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMUPDATED":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (IRoomListener listener in roomListeners)
                             {
                                 listener.onRoomUpdated(eventv4.payload.roomUpdated);
                             }
@@ -173,7 +173,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMDEACTIVATED":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (IRoomListener listener in roomListeners)
                             {
                                 listener.onRoomDeactivated(eventv4.payload.roomDeactivated);
                             }
@@ -181,7 +181,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMREACTIVATED":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (IRoomListener listener in roomListeners)
                             {
                                 listener.onRoomReactivated(eventv4.payload.roomReactivated.stream);
                             }
@@ -189,7 +189,7 @@ namespace apiClientDotNet.Services
 
                         case "USERJOINEDROOM":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (IRoomListener listener in roomListeners)
                             {
                                 listener.onUserJoinedRoom(eventv4.payload.userJoinedRoom);
                             }
@@ -197,7 +197,7 @@ namespace apiClientDotNet.Services
 
                         case "USERLEFTROOM":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (IRoomListener listener in roomListeners)
                             {
                                 listener.onUserLeftRoom(eventv4.payload.userLeftRoom);
                             }
@@ -205,7 +205,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMMEMBERPROMOTEDTOOWNER":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (IRoomListener listener in roomListeners)
                             {
                                 listener.onRoomMemberPromotedToOwner(eventv4.payload.roomMemberPromotedToOwner);
                             }
@@ -213,7 +213,7 @@ namespace apiClientDotNet.Services
 
                         case "ROOMMEMBERDEMOTEDFROMOWNER":
 
-                            foreach (RoomListener listener in roomListeners)
+                            foreach (IRoomListener listener in roomListeners)
                             {
                                 listener.onRoomMemberDemotedFromOwner(eventv4.payload.roomMemberDemotedFromOwner);
                             }
@@ -221,7 +221,7 @@ namespace apiClientDotNet.Services
 
                         case "CONNECTIONACCEPTED":
 
-                            foreach (ConnectionListener listener in connectionListeners)
+                            foreach (IConnectionListener listener in connectionListeners)
                             {
                                 listener.onConnectionAccepted(eventv4.payload.connectionAccepted.fromUser);
                             }
@@ -229,7 +229,7 @@ namespace apiClientDotNet.Services
 
                         case "CONNECTIONREQUESTED":
 
-                            foreach (ConnectionListener listener in connectionListeners)
+                            foreach (IConnectionListener listener in connectionListeners)
                             {
                                 listener.onConnectionRequested(eventv4.payload.connectionRequested.toUser);
                             }
@@ -239,7 +239,7 @@ namespace apiClientDotNet.Services
                             string streamId = eventv4.payload.symphonyElementsAction.stream.streamId.ToString();
                             SymphonyElementsAction symphonyElementsAction = eventv4.payload.symphonyElementsAction;
 			                User user = eventv4.initiator.user;
-                            foreach (ElementsActionListener listener in elementsActionListeners)
+                            foreach (IElementsActionListener listener in elementsActionListeners)
                             {
                                 listener.onFormMessage(user, streamId, symphonyElementsAction);
                             }
@@ -251,42 +251,42 @@ namespace apiClientDotNet.Services
             }
         }
 
-        public void addRoomListener(RoomListener listener)
+        public void addRoomListener(IRoomListener listener)
         {
             roomListeners.Add(listener);
         }
 
-        public void removeRoomListener(RoomListener listener)
+        public void removeRoomListener(IRoomListener listener)
         {
             roomListeners.Remove(listener);
         }
 
-        public void addIMListener(IMListener listener)
+        public void addIMListener(IIMListener listener)
         {
             IMListeners.Add(listener);
         }
 
-        public void removeIMListener(IMListener listener)
+        public void removeIMListener(IIMListener listener)
         {
             IMListeners.Remove(listener);
         }
 
-        public void addConnectionsListener(ConnectionListener listener)
+        public void addConnectionsListener(IConnectionListener listener)
         {
             connectionListeners.Add(listener);
         }
 
-        public void removeConnectionsListener(ConnectionListener listener)
+        public void removeConnectionsListener(IConnectionListener listener)
         {
             connectionListeners.Remove(listener);
         }
 
-        public void addElementsActionListener(ElementsActionListener listener)
+        public void addElementsActionListener(IElementsActionListener listener)
         {
             elementsActionListeners.Add(listener);
         }
 
-        public void removeElementsActionListener(ElementsActionListener listener)
+        public void removeElementsActionListener(IElementsActionListener listener)
         {
             elementsActionListeners.Remove(listener);
         }

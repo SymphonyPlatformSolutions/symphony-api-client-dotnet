@@ -53,7 +53,7 @@ namespace apiClientDotNetTest
         class FakeConnectionsClientWithMissingValues : FakeConnectionsClient
         {
             public FakeConnectionsClientWithMissingValues(ISymClient client) : base(client) { }
-            protected override RestRequestHandler CreateRestHadnler()
+            protected override RestRequestHandler CreateRestRequestHandler()
             {
                 moqRestRequestHandler.Setup(x => x.ReadResponse(It.IsAny<HttpWebResponse>())).Returns(jsonWithMissingValues);
                 return moqRestRequestHandler.Object;
@@ -63,7 +63,7 @@ namespace apiClientDotNetTest
         class FakeConnectionsClientWithNullValues : FakeConnectionsClient
         {
             public FakeConnectionsClientWithNullValues(ISymClient client) : base(client) { }
-            protected override RestRequestHandler CreateRestHadnler()
+            protected override RestRequestHandler CreateRestRequestHandler()
             {
                 moqRestRequestHandler.Setup(x => x.ReadResponse(It.IsAny<HttpWebResponse>())).Returns(jsonWithNullValues);
                 return moqRestRequestHandler.Object;
@@ -73,7 +73,7 @@ namespace apiClientDotNetTest
         class FakeConnectionsClientWithAllValues : FakeConnectionsClient
         {
             public FakeConnectionsClientWithAllValues(ISymClient client) : base(client) { }
-            protected override RestRequestHandler CreateRestHadnler()
+            protected override RestRequestHandler CreateRestRequestHandler()
             {
                 moqRestRequestHandler.Setup(x => x.ReadResponse(It.IsAny<HttpWebResponse>())).Returns(jsonWithAllValues);
                 return moqRestRequestHandler.Object;
