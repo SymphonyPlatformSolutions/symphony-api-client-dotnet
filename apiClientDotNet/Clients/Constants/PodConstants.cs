@@ -24,7 +24,7 @@ namespace apiClientDotNet.Clients.Constants
         public static String REJECTCONNECTION = POD+"/v1/connection/reject";
         public static String GETCONNECTIONSTATUS = POD+"/v1/connection/user/{userId}/info";
         public static String REMOVECONNECTION = POD+"/v1/connection/user/{userId}/remove";
-        public static String GETCONNECTIONS = POD + "v1/connection/list";
+        public static String GETCONNECTIONS = POD + "/v1/connection/list";
         public static String SENDCONNECTIONREQUEST = POD+"/v1/connection/create";
         public static String GETMESSAGESTATUS =  POD+"/v1/message/{mid}/status";
         public static String GETUSERPRESENCE =  POD+"/v3/user/{uid}/presence";

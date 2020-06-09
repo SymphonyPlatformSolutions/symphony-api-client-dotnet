@@ -25,22 +25,22 @@ namespace apiClientDotNet.Clients
 
         public List<InboundConnectionRequest> getInboundPendingConnections()
         {
-            return getConnections("PENDING_INCOMING", null);
+            return getConnections(ConnectionStatus.PENDING, null);
         }
 
         public List<InboundConnectionRequest> getAllConnections()
         {
-            return getConnections("ALL", null);
+            return getConnections(ConnectionStatus.ALL, null);
         }
 
         public List<InboundConnectionRequest> getAcceptedConnections()
         {
-            return getConnections("ACCEPTED", null);
+            return getConnections(ConnectionStatus.ACCEPTED, null);
         }
 
         public List<InboundConnectionRequest> getRejectedConnections()
         {
-            return getConnections("REJECTED", null);
+            return getConnections(ConnectionStatus.REJECTED, null);
         }
 
         public List<InboundConnectionRequest> getConnections(String status, List<long> userIds)

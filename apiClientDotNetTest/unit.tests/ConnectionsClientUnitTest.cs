@@ -3,11 +3,8 @@ using apiClientDotNet.Models;
 using apiClientDotNet.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 
 namespace apiClientDotNetTest
 {
