@@ -49,5 +49,8 @@ namespace apiClientDotNet.Models
         [JsonProperty("avatars")]
         public List<Avatar> avatars { get; set; }
 
+        [JsonProperty("emailAddress")]
+        public string emailAddress { get; set; }
+
     }
 }

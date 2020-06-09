@@ -20,7 +20,7 @@ namespace apiClientDotNet.Utils
             Certificates.Add(new X509Certificate2(cert, password));
         }
 
-        public HttpWebResponse executeRequest(object data, String url, bool isAuth, string method, SymConfig symConfig, bool isAgent)
+        public virtual HttpWebResponse executeRequest(object data, String url, bool isAuth, string method, SymConfig symConfig, bool isAgent)
         {
             HttpWebResponse response = null;
             //If POST and not Auth set response to postApi
@@ -157,7 +157,7 @@ namespace apiClientDotNet.Utils
             }
         }
 
-        public string ReadResponse(HttpWebResponse resp)
+        public virtual string ReadResponse(HttpWebResponse resp)
         {
             using (var reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8))
             {

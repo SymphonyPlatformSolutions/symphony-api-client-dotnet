@@ -5,10 +5,14 @@
   "test_username": "user name",
   "test_useremail": "user email",
   "test_displayname": "account display name",
-  "test_room_name":  "name of a room",
+  "test_room_name": "name of a room",
   // Parameters related to a specific test
   "UserClientIntegrationTest": {
+    "test_email_address": "an user email address",
     "test_email_addresses": "comma separated string of email addresses",
     "test_search_user_query": "search by some query like name"
+  },
+  "ConnectionsClientIntegrationTest": {
+    "test_email_address_user_receiver": "email address of the user that receives connection request"
   }
 }
