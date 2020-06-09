@@ -14,6 +14,7 @@ namespace apiClientDotNet.Models.Events
         public ActionStream actionStream { get; set; }
 
         [JsonProperty("formStream")]
+        [Obsolete("formStream is not used since Symphony 1.57+")]
         public Stream formStream
         {
             get
