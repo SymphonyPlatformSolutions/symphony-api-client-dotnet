@@ -50,7 +50,7 @@ namespace apiClientDotNet
 
         }
 
-        public List<InboundMessage> getMessagesFromStream(String streamId, int since, int skip, int limit)
+        public List<InboundMessage> getMessagesFromStream(String streamId, long since, int skip, int limit)
         {
             List<InboundMessage> inboundMessages = null;
             SymConfig symConfig = botClient.getConfig();
