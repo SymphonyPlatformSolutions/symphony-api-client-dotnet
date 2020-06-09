@@ -14,7 +14,17 @@ namespace apiClientDotNet.Models.Events
         public ActionStream actionStream { get; set; }
 
         [JsonProperty("formStream")]
-        public Stream formStream { get; set; }
+        public Stream formStream
+        {
+            get
+            {
+                return stream;
+            }
+            set
+            {
+                stream = value;
+            }
+        }
 
         [JsonProperty("stream")]
         public Stream stream { get; set; }
