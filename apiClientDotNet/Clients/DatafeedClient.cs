@@ -16,7 +16,7 @@ namespace apiClientDotNet
 {
     public class DatafeedClient
     {
-        List<RoomListener> listeners = new List<RoomListener>();
+        List<IRoomListener> listeners = new List<IRoomListener>();
         static HttpClient client = new HttpClient();
 
         public Datafeed createDatafeed(SymConfig symConfig)
