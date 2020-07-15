@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace apiClientDotNet.Clients.Constants
 {
@@ -10,7 +8,7 @@ namespace apiClientDotNet.Clients.Constants
         public static String READDATAFEED = "/agent/v4/datafeed/{id}/read";
         public static String CREATEMESSAGE = "/agent/v4/stream/{sid}/message/create";
         public static String GETMESSAGES = "/agent/v4/stream/{sid}/message";
-        public static String GETATTACHMENT = "/v1/stream/{sid}/attachment";
+        public static String GETATTACHMENT = "/agent/v1/stream/{sid}/attachment";
 
         public static String SEARCHMESSAGES = "/agent/v1/message/search";
         public static String MESSAGEIMPORT = "/agent/v4/message/import" ;
@@ -22,7 +20,7 @@ namespace apiClientDotNet.Clients.Constants
         public static String DELETESIGNAL = "/agent/v1/signals/{id}/delete";
         public static String SUBSCRIBESIGNAL = "/agent/v1/signals/{id}/subscribe";
         public static String UNSUBSCRIBESIGNAL = "/agent/v1/signals/{id}/unsubscribe";
-        public static String GETSUBSCRIBERS = "/v1/signals/{id}/subscribers";
+        public static String GETSUBSCRIBERS = "/agent/v1/signals/{id}/subscribers";
 
     }
 }

@@ -82,7 +82,7 @@ namespace apiClientDotNet
             SymConfig symConfig = botClient.getConfig();
 
             RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.GETATTACHMENT.Replace("{sid}", streamId) + "?filedId=" + attachmentId + "&messageId=" + messageId;
+            string url = CommonConstants.HTTPSPREFIX + symConfig.agentHost + ":" + symConfig.agentPort + AgentConstants.GETATTACHMENT.Replace("{sid}", streamId) + "?fileId=" + attachmentId + "&messageId=" + messageId;
 
             HttpWebResponse resp = restRequestHandler.executeRequest(null, url, false, WebRequestMethods.Http.Get, symConfig, true);
             string body = restRequestHandler.ReadResponse(resp);
