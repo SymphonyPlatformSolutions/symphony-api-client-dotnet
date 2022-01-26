@@ -15,7 +15,7 @@ namespace apiClientDotNet
         private SymConfig config;
         private ISymAuth symBotAuth;
         private DatafeedEventsService datafeedEventsService;
-        private FirehoseEventsService firehostEventsService;
+        private FirehoseEventsService firehoseEventsService;
         private MessageClient messagesClient;
         private StreamClient streamClient;
         private PresenceClient presenceClient;
@@ -60,11 +60,11 @@ namespace apiClientDotNet
 
         public FirehoseEventsService getFirehoseEventsService()
         {
-            if (firehostEventsService == null)
+            if (firehoseEventsService == null)
             {
-               firehostEventsService = new FirehoseEventsService(this);
+               firehoseEventsService = new FirehoseEventsService(this);
             }
-            return firehostEventsService;
+            return firehoseEventsService;
         }
 
         public SymConfig getConfig()
