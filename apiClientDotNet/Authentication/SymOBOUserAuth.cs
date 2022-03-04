@@ -9,9 +9,9 @@ namespace apiClientDotNet.Authentication
     {
         public long UserId {get; private set;}
         public String UserName {get; private set;}
-        private SymOBOAuth AppAuth;
+        private SymOBOAuthBase AppAuth;
 
-        public SymOBOUserAuth(long uid, SymOBOAuth appAuth)
+        public SymOBOUserAuth(long uid, SymOBOAuthBase appAuth)
         {
             UserId = uid;
             AppAuth = appAuth;
@@ -19,7 +19,7 @@ namespace apiClientDotNet.Authentication
             SymConfig.authTokens = new AuthTokens();
         }
 
-        public SymOBOUserAuth(string username, SymOBOAuth appAuth)
+        public SymOBOUserAuth(string username, SymOBOAuthBase appAuth)
         {
             UserId = 0;
             UserName = username;
@@ -66,7 +66,7 @@ namespace apiClientDotNet.Authentication
 
         public override void Logout()
         {
-            var response = AppAuth.GetAppAuthClient().PostAsync(AuthEndpointConstants.LogoutPath, null).Result;
+            throw new NotImplementedException();
         }
 
         public override string GetKeyManagerToken(){

@@ -21,7 +21,8 @@ namespace apiClientDotNet.Authentication
         public const string LogoutPath = "/sessionauth/v1/logout";
         public const string RsaSessionAuthPath = "/login/pubkey/authenticate";
         public const string RsaKeyManagerAuthPath = "/relay/pubkey/authenticate";
-        public const string AppSessionAuthPath = "/sessionauth/v1/app/authenticate";
+        public const string OBOAppSessionAuthPath = "/sessionauth/v1/app/authenticate";
+        public const string OBOAppSessionRSAAuthPath = "/login/pubkey/app/authenticate";
         public const string OboUserAuthByIdPath = "/login/pubkey/app/user/{uid}/authenticate";
         public const string OboUserAuthByUsernamePath = "/login/pubkey/app/username/{username}/authenticate";
     }
