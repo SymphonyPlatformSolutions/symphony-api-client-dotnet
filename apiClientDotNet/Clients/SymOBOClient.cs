@@ -11,8 +11,7 @@ namespace apiClientDotNet.Clients
     {
         private static SymOBOClient botClient;
         private SymConfig config;
-        private ISymAuth symBotAuth;
-        private DatafeedEventsService datafeedEventsService;
+        private ISymAuth symOBOAuth;
         private MessageClient messagesClient;
         private StreamClient streamClient;
         private PresenceClient presenceClient;
@@ -20,15 +19,9 @@ namespace apiClientDotNet.Clients
         private ConnectionsClient connectionsClient;
         private SignalsClient signalsClient;
 
-        public static SymOBOClient initOBOClient(SymConfig config, ISymAuth symBotAuth)
+        public SymOBOClient(SymConfig config, ISymAuth symOBOAuth)
         {
-            botClient = new SymOBOClient(config, symBotAuth);
-            return botClient;
-        }
-
-        private SymOBOClient(SymConfig config, ISymAuth symBotAuth)
-        {
-            this.symBotAuth = symBotAuth;
+            this.symOBOAuth = symOBOAuth;
             this.config = config;
         }
 
@@ -39,7 +32,7 @@ namespace apiClientDotNet.Clients
 
         public ISymAuth getSymAuth()
         {
-            return symBotAuth;
+            return symOBOAuth;
         }
 
         public MessageClient getMessagesClient()
