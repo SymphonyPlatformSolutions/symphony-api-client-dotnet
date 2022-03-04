@@ -49,6 +49,15 @@ namespace apiClientDotNet.Models
         [JsonProperty("appCertPassword")]
         public string appCertPassword { get; set; }
 
+        [JsonProperty("appPrivateKeyPath")]
+        public string appPrivateKeyPath { get; set; }
+
+        [JsonProperty("appPrivateKeyName")]
+        public string appPrivateKeyName { get; set; }
+
+        [JsonProperty("appId")]
+        public string appId { get; set; }
+
         [JsonProperty("authTokenRefreshPeriod")]
         public string authTokenRefreshPeriod { get; set; }
 

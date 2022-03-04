@@ -1,106 +1,79 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using apiClientDotNet.Models;
-using Newtonsoft.Json.Linq;
-using apiClientDotNet.Utils;
-using System.Net;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace apiClientDotNet.Authentication
 {
-    public class SymOBOUserAuth : ISymAuth
+    public class SymOBOUserAuth : SymAuthBase
     {
-        AuthTokens authTokens;
-        private String sessionToken;
-        private SymConfig config;
-        private long uid;
-        private String username;
-        private SymOBOAuth appAuth;
+        public long UserId {get; private set;}
+        public String UserName {get; private set;}
+        private SymOBOAuthBase AppAuth;
 
-        public SymOBOUserAuth( SymConfig config, long uid, SymOBOAuth appAuth)
+        public SymOBOUserAuth(long uid, SymOBOAuthBase appAuth)
         {
-            this.config = config;
-            this.uid = uid;
-            this.appAuth = appAuth;
-            authTokens = config.authTokens;
+            UserId = uid;
+            AppAuth = appAuth;
+            SymConfig = appAuth.GetSymConfig();
+            SymConfig.authTokens = new AuthTokens();
         }
 
-        public SymOBOUserAuth( SymConfig config, String username, SymOBOAuth appAuth)
+        public SymOBOUserAuth(string username, SymOBOAuthBase appAuth)
         {
-            this.config = config;
-            this.username = username;
-            this.appAuth = appAuth;
-            authTokens = config.authTokens;
+            UserId = 0;
+            UserName = username;
+            AppAuth = appAuth;
+            SymConfig = appAuth.GetSymConfig();
+            SymConfig.authTokens = new AuthTokens();
         }
 
-        public void authenticate()
-        {
-            sessionAuthenticate();
+        public override void Authenticate(){
+            SessionAuthenticate();
         }
 
-        public string getKmToken()
+        public override void SessionAuthenticate()
         {
-            throw new NotImplementedException();
-        }
-
-        public string getSessionToken()
-        {
-            return sessionToken;
-        }
-
-        public void kmAuthenticate()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void sessionAuthenticate()
-        {
-            if (uid != 0)
+            AppAuth.authenticate();
+            string requestPath;
+            if (UserId != 0) 
             {
-                RestRequestHandler restRequestHandler = new RestRequestHandler();
-                string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.OBOUSERAUTH.Replace("{uid}", uid.ToString());
-                HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
-                string body = restRequestHandler.ReadResponse(resp);
-                resp.Close();
-                JObject o = JObject.Parse(body);
-                authTokens.sessionToken = (string)o["sessionToken"];
-                sessionToken = authTokens.sessionToken;
+                requestPath = AuthEndpointConstants.OboUserAuthByIdPath.Replace("{uid}", UserId.ToString());
             }
-            else
+            else 
             {
-                RestRequestHandler restRequestHandler = new RestRequestHandler();
-                string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.OBOUSERAUTHUSERNAME.Replace("{username}", username);
-                HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
-                string body = restRequestHandler.ReadResponse(resp);
-                resp.Close();
-                JObject o = JObject.Parse(body);
-                authTokens.sessionToken = (string)o["sessionToken"];
-                sessionToken = authTokens.sessionToken;
-
+                requestPath = AuthEndpointConstants.OboUserAuthByUsernamePath.Replace("{username}", UserName);
+            }
+            var request = new HttpRequestMessage() {
+                RequestUri = new Uri( GetSessionAuthClient().BaseAddress + requestPath),
+                Method = HttpMethod.Post
+            };
+            request.Headers.Add("sessionToken", AppAuth.GetSessionToken());
+            var response = GetSessionAuthClient().SendAsync(request).Result;
+            if (response.IsSuccessStatusCode) 
+            {
+                SessionToken = JsonConvert.DeserializeObject<Token>(response.Content.ReadAsStringAsync().Result).token;
+                SymConfig.authTokens.sessionToken = SessionToken;
+            }
+            else 
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound) {
+                    throw new Exception("User Not Found.");
+                }
+                else throw new Exception("Unable to Authenticate");
             }
         }
 
-        public void setKmToken(string kmToken)
+        public override void Logout()
         {
             throw new NotImplementedException();
         }
 
-        public void setSessionToken(string sessionToken)
-        {
-
-            this.sessionToken = sessionToken;
-            this.authTokens.sessionToken = sessionToken;
+        public override string GetKeyManagerToken(){
+            return "";
         }
 
-        public void logout()
-        {
-            RestRequestHandler restRequestHandler = new RestRequestHandler();
-            string url = "https://" + config.sessionAuthHost + ":" + config.sessionAuthPort + AuthEndpointConstants.LOGOUTPATH;
-            HttpWebResponse resp = restRequestHandler.executeRequest(null, url, true, WebRequestMethods.Http.Post, config, false);
-            string body = restRequestHandler.ReadResponse(resp);
-            resp.Close();
-            JObject o = JObject.Parse(body);
-            string message = (string)o["message"];
-        }
+        public override void SetKeyManagerToken(string kmToken) {}
+        public override void KeyManagerAuthenticate() {}
     }
 }

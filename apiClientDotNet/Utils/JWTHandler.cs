@@ -50,15 +50,19 @@ namespace apiClientDotNet.Utils
 
         public string generateJWT(SymConfig config)
         {
+            return generateJWT(config.botUsername, config.botPrivateKeyPath + config.botPrivateKeyName);
+        }
+
+        public string generateJWT(string subject, string privateKey) {
             string jwt = "";
 
-            AsymmetricKeyParameter secret = parseSecret(config);
+            AsymmetricKeyParameter secret = parseSecret(privateKey);
 
             DateTime otherTime = DateTime.Now.AddMinutes(4);
 
             var payload = new JwtPayload
             {
-                { "sub", config.botUsername },
+                { "sub", subject },
                 { "exp", ToUtcSeconds(otherTime) }
             };
 
@@ -73,19 +77,18 @@ namespace apiClientDotNet.Utils
             }
 
             return jwt;
-
         }
 
-        private AsymmetricKeyParameter parseSecret(SymConfig config)
+        private AsymmetricKeyParameter parseSecret(string privateKey)
         {
             AsymmetricCipherKeyPair keyPair;
 
-            using (var reader = File.OpenText(config.botPrivateKeyPath + config.botPrivateKeyName)) // file containing RSA PKCS1 private key
+            using (var reader = File.OpenText(privateKey)) // file containing RSA PKCS1 private key
                 keyPair = (AsymmetricCipherKeyPair)new PemReader(reader).ReadObject();
 
-            AsymmetricKeyParameter privateKey = keyPair.Private;
+            AsymmetricKeyParameter secret = keyPair.Private;
 
-            return privateKey;
+            return secret;
         }
 
 

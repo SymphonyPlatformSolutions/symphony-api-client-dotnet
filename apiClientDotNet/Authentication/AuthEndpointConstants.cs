@@ -15,5 +15,15 @@ namespace apiClientDotNet.Authentication
         public static String SESSIONAPPAUTH = "/sessionauth/v1/app/authenticate";
         public static String OBOUSERAUTH = "/sessionauth/v1/app/user/{uid}/authenticate";
         public static String OBOUSERAUTHUSERNAME = "/sessionauth/v1/app/username/{username}/authenticate";
+        public const string HttpsPrefix = "https://";
+        public const string SessionAuthPath = "/sessionauth/v1/authenticate";
+        public const string KeyAuthPath = "/keyauth/v1/authenticate";
+        public const string LogoutPath = "/sessionauth/v1/logout";
+        public const string RsaSessionAuthPath = "/login/pubkey/authenticate";
+        public const string RsaKeyManagerAuthPath = "/relay/pubkey/authenticate";
+        public const string OBOAppSessionAuthPath = "/sessionauth/v1/app/authenticate";
+        public const string OBOAppSessionRSAAuthPath = "/login/pubkey/app/authenticate";
+        public const string OboUserAuthByIdPath = "/login/pubkey/app/user/{uid}/authenticate";
+        public const string OboUserAuthByUsernamePath = "/login/pubkey/app/username/{username}/authenticate";
     }
 }
